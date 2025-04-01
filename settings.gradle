@@ -2,3 +2,4 @@ rootProject.name = 'hello-multi-modules'
 
 include('hello-module')
 include('payment-api')
+include('inventory-api')
