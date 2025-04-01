@@ -20,6 +20,6 @@ public class DefaultPaymentProcessorV4 implements PaymentProcessorV2 {
     public PaymentResult process(PaymentContext paymentContext) {
         PaymentMethod paymentMethod = paymentMethodFactory.getPaymentMethod(paymentContext.paymentMethodType());
         paymentMethod.validate(paymentContext.paymentRequest());
-        return paymentMethod.execute(paymentContext.paymentRequest());
+        return paymentMethod.pay(paymentContext.paymentRequest());
     }
 }

@@ -30,7 +30,7 @@ public class CreditCardPaymentMethod implements PaymentMethod {
     }
 
     @Override
-    public PaymentResult execute(PaymentRequest request) {
+    public PaymentResult pay(PaymentRequest request) {
         try {
             validate(request);
         } catch (CoreException e) {

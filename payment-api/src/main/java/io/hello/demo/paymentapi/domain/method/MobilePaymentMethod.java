@@ -12,7 +12,7 @@ public class MobilePaymentMethod implements PaymentMethod{
     }
 
     @Override
-    public PaymentResult execute(PaymentRequest request) {
+    public PaymentResult pay(PaymentRequest request) {
         return null;
     }
 
