@@ -2,19 +2,21 @@ package io.hello.demo.paymentapi.domain;
 
 import io.hello.demo.inventoryapi.InventoryService;
 import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
-import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
+import io.hello.demo.paymentapi.domain.processor.PaymentProcessorV2;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
     private final TransactionIdGenerator transactionIdGenerator;
-    private final PaymentProcessor paymentProcessor;
+    private final PaymentProcessorV2 paymentProcessor;
     private final InventoryService inventoryService;
 
     public PaymentServiceImpl(TransactionIdGenerator transactionIdGenerator,
-                              @Qualifier("defaultPaymentProcessorV3") PaymentProcessor paymentProcessor,
+                              @Qualifier("defaultPaymentProcessorV4") PaymentProcessorV2 paymentProcessor,
                               InventoryService inventoryService) {
         this.transactionIdGenerator = transactionIdGenerator;
         this.paymentProcessor = paymentProcessor;
@@ -23,7 +25,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
-    public PaymentResult processPayment(PaymentRequest request, String productId, int quantity) {
+    public PaymentResult processPayment(PaymentContext paymentContext, String productId, int quantity) {
 
         boolean inventoryReserved = inventoryService.checkAndReserveInventory(productId, quantity);
 
@@ -36,6 +38,6 @@ public class PaymentServiceImpl implements PaymentService {
                     .build();
         }
 
-        return paymentProcessor.process(request); // 결제 처리
+        return paymentProcessor.process(paymentContext); // 결제 처리
     }
 }

@@ -1,4 +1,4 @@
-package io.hello.demo.paymentapi.domain;
+package io.hello.demo.paymentapi.domain.request.v1;
 
 public record PaymentRequest(
         Long amount,

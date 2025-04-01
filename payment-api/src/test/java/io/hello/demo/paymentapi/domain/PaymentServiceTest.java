@@ -4,10 +4,15 @@ import io.hello.demo.inventoryapi.DefaultInventoryService;
 import io.hello.demo.inventoryapi.InventoryService;
 import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
 import io.hello.demo.paymentapi.domain.generator.UuidTransactionIdGenerator;
-import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
-import io.hello.demo.paymentapi.domain.processor.v3.DefaultPaymentProcessorV3;
-import io.hello.demo.paymentapi.domain.validator.*;
-
+import io.hello.demo.paymentapi.domain.method.*;
+import io.hello.demo.paymentapi.domain.processor.PaymentProcessorV2;
+import io.hello.demo.paymentapi.domain.processor.v4.DefaultPaymentProcessorV4;
+import io.hello.demo.paymentapi.domain.request.v2.CreditCardPaymentRequest;
+import io.hello.demo.paymentapi.domain.validator.v2.creditcard.AmountValidator;
+import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardCvcValidator;
+import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardExpiryValidator;
+import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardNumberValidator;
+import io.hello.demo.paymentapi.domain.validator.v2.PaymentMethodValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,15 +39,32 @@ class PaymentServiceTest {
     void setUp() {
         TransactionIdGenerator transactionIdGenerator = new UuidTransactionIdGenerator();
 
-        List<PaymentValidator> validators = List.of(
+//        List<PaymentValidator> validators = List.of(
+//                new AmountValidator(),
+//                new CardNumberValidator(),
+//                new CardExpiryValidator(),
+//                new CardCvcValidator()
+//        );
+
+        List<PaymentMethodValidator> validators = List.of(
                 new AmountValidator(),
                 new CardNumberValidator(),
                 new CardExpiryValidator(),
                 new CardCvcValidator()
         );
 
+        List<PaymentMethod> paymentMethods = List.of(
+                new CreditCardPaymentMethod(validators, transactionIdGenerator),
+                new VirtualAccountPaymentMethod(),
+                new MobilePaymentMethod()
+        );
+
+        PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory(paymentMethods);
+
         inventoryService = new DefaultInventoryService();
-        PaymentProcessor paymentProcessor = new DefaultPaymentProcessorV3(transactionIdGenerator, validators);
+//        PaymentProcessor paymentProcessor = new DefaultPaymentProcessorV3(transactionIdGenerator, validators);
+
+        PaymentProcessorV2 paymentProcessor = new DefaultPaymentProcessorV4(paymentMethodFactory);
         paymentService = new PaymentServiceImpl(transactionIdGenerator, paymentProcessor, inventoryService);
     }
 
@@ -67,20 +89,23 @@ class PaymentServiceTest {
             for (int i = 0; i < numConcurrentRequests; i++) {
                 final int count = i;
                 es.submit(() -> {
-                    PaymentRequest request = new PaymentRequest(
-                            1000L,
-                            "1234-5678-9012-3456",
-                            "12/25",
-                            "123",
-                            "merchant-1"
+                    PaymentContext paymentContext = new PaymentContext(
+                            PaymentMethodType.CREDIT_CARD,
+                            new CreditCardPaymentRequest(
+                                    1000L,
+                                    "1234-5678-9012-3456",
+                                    "12/25",
+                                    "123",
+                                    "merchant-1"
+                            )
                     );
 
                     try {
-                        log.info("Processing payment request Thread-{} : {}", count, request);
+                        log.info("Processing payment request Thread-{}", count);
 
                         readyLatch.countDown();
                         startLatch.await();
-                        PaymentResult result = paymentService.processPayment(request, productId, 1);
+                        PaymentResult result = paymentService.processPayment(paymentContext, productId, 1);
                         if (result.status() == PaymentStatus.APPROVED) {
                             successCount.incrementAndGet();
                             log.info("Payment approved Thread-{} : {}", count, result.transactionId());

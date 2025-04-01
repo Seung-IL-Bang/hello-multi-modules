@@ -1,6 +1,6 @@
-package io.hello.demo.paymentapi.domain.validator;
+package io.hello.demo.paymentapi.domain.validator.v1;
 
-import io.hello.demo.paymentapi.domain.PaymentRequest;
+import io.hello.demo.paymentapi.domain.request.v1.PaymentRequest;
 import io.hello.demo.paymentapi.support.error.CoreException;
 import io.hello.demo.paymentapi.support.error.ErrorType;
 import org.springframework.stereotype.Component;

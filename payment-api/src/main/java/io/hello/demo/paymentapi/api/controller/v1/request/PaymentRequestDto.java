@@ -1,6 +1,6 @@
 package io.hello.demo.paymentapi.api.controller.v1.request;
 
-import io.hello.demo.paymentapi.domain.PaymentRequest;
+import io.hello.demo.paymentapi.domain.request.v1.PaymentRequest;
 
 public record PaymentRequestDto(
         Long amount,

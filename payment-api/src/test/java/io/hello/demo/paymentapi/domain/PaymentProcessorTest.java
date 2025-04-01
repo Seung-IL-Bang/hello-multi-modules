@@ -1,13 +1,18 @@
 package io.hello.demo.paymentapi.domain;
 
-import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
-import io.hello.demo.paymentapi.domain.processor.v3.DefaultPaymentProcessorV3;
 import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
 import io.hello.demo.paymentapi.domain.generator.UuidTransactionIdGenerator;
-import io.hello.demo.paymentapi.domain.validator.*;
+import io.hello.demo.paymentapi.domain.method.*;
+import io.hello.demo.paymentapi.domain.processor.PaymentProcessorV2;
+import io.hello.demo.paymentapi.domain.processor.v4.DefaultPaymentProcessorV4;
+import io.hello.demo.paymentapi.domain.request.v2.CreditCardPaymentRequest;
+import io.hello.demo.paymentapi.domain.validator.v2.PaymentMethodValidator;
+import io.hello.demo.paymentapi.domain.validator.v2.creditcard.AmountValidator;
+import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardCvcValidator;
+import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardExpiryValidator;
+import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardNumberValidator;
 import io.hello.demo.paymentapi.support.error.CoreException;
 import io.hello.demo.paymentapi.support.error.ErrorType;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,22 +25,32 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PaymentProcessorTest {
 
-    private PaymentProcessor paymentProcessor;
+    private PaymentProcessorV2 paymentProcessor;
 
     @BeforeEach
     void setUp() {
         TransactionIdGenerator transactionIdGenerator = new UuidTransactionIdGenerator();
 
-        List<PaymentValidator> validators = List.of(
+        List<PaymentMethodValidator> validators = List.of(
                 new AmountValidator(),
                 new CardNumberValidator(),
                 new CardExpiryValidator(),
                 new CardCvcValidator()
         );
 
+
+        List<PaymentMethod> paymentMethods = List.of(
+                new CreditCardPaymentMethod(validators, transactionIdGenerator),
+                new VirtualAccountPaymentMethod(),
+                new MobilePaymentMethod()
+        );
+
+        PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory(paymentMethods);
+
 //        paymentProcessor = new DefaultPaymentProcessorV1();
 //        paymentProcessor = new DefaultPaymentProcessorV2(validators);
-        paymentProcessor = new DefaultPaymentProcessorV3(transactionIdGenerator, validators);
+//        paymentProcessor = new DefaultPaymentProcessorV3(transactionIdGenerator, validators);
+        paymentProcessor = new DefaultPaymentProcessorV4(paymentMethodFactory);
     }
 
 
@@ -43,16 +58,18 @@ class PaymentProcessorTest {
     @Test
     void testPaymentProcess_withValidRequest_shouldReturnApprovedResult() {
         // given
-        PaymentRequest paymentRequest = new PaymentRequest(
-                10000L,
-                "1234-5678-9012-3456",
-                "12/25",
-                "123",
-                "VISA"
+        PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
+                new CreditCardPaymentRequest(
+                        10000L,
+                        "1234-5678-9012-3456",
+                        "12/25",
+                        "123",
+                        "VISA"
+                )
         );
 
         // when
-        PaymentResult result = paymentProcessor.process(paymentRequest);
+        PaymentResult result = paymentProcessor.process(paymentContext);
 
         // then
         assertThat(result.status()).isEqualTo(PaymentStatus.APPROVED);
@@ -66,16 +83,18 @@ class PaymentProcessorTest {
     @Test
     void testPaymentProcess_withInvalidAmount_shouldThrowCoreException() {
         // given
-        PaymentRequest paymentRequest = new PaymentRequest(
-                -10000L,
-                "1234-5678-9012-3456",
-                "12/25",
-                "123",
-                "VISA"
+        PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
+                new CreditCardPaymentRequest(
+                        -10000L,
+                        "1234-5678-9012-3456",
+                        "12/25",
+                        "123",
+                        "VISA"
+                )
         );
 
         // when & then
-        assertThatThrownBy(() -> paymentProcessor.process(paymentRequest))
+        assertThatThrownBy(() -> paymentProcessor.process(paymentContext))
                 .isInstanceOf(CoreException.class)
                 .hasMessage(ErrorType.INVALID_PAYMENT_AMOUNT.getMessage())
                 .hasFieldOrPropertyWithValue("errorType", ErrorType.INVALID_PAYMENT_AMOUNT);
@@ -85,16 +104,18 @@ class PaymentProcessorTest {
     @Test
     void testPaymentProcess_withZeroAmount_shouldReturnApprovedResult() {
         // given
-        PaymentRequest paymentRequest = new PaymentRequest(
-                0L,
-                "1234-5678-9012-3456",
-                "12/25",
-                "123",
-                "VISA"
+        PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
+                new CreditCardPaymentRequest(
+                        0L,
+                        "1234-5678-9012-3456",
+                        "12/25",
+                        "123",
+                        "VISA"
+                )
         );
 
         // when
-        PaymentResult result = paymentProcessor.process(paymentRequest);
+        PaymentResult result = paymentProcessor.process(paymentContext);
 
         // then
         assertThat(result.status()).isEqualTo(PaymentStatus.APPROVED);
@@ -108,16 +129,18 @@ class PaymentProcessorTest {
     @Test
     void testPaymentProcess_withInvalidCardNumber_shouldThrowCoreException() {
         // given
-        PaymentRequest paymentRequest = new PaymentRequest(
-                10000L,
-                "invalid-card-number",
-                "12/25",
-                "123",
-                "VISA"
+        PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
+                new CreditCardPaymentRequest(
+                        10000L,
+                        "invalid-card-number",
+                        "12/25",
+                        "123",
+                        "VISA"
+                )
         );
 
         // when & then
-        assertThatThrownBy(() -> paymentProcessor.process(paymentRequest))
+        assertThatThrownBy(() -> paymentProcessor.process(paymentContext))
                 .isInstanceOf(CoreException.class)
                 .hasMessage(ErrorType.INVALID_PAYMENT_CARD_NUMBER.getMessage())
                 .hasFieldOrPropertyWithValue("errorType", ErrorType.INVALID_PAYMENT_CARD_NUMBER);
@@ -127,16 +150,18 @@ class PaymentProcessorTest {
     @Test
     void testPaymentProcess_withInvalidCardExpiryDate_shouldThrowCoreException() {
         // given
-        PaymentRequest paymentRequest = new PaymentRequest(
-                10000L,
-                "1234-5678-9012-3456",
-                "invalid-expiry-date",
-                "123",
-                "VISA"
+        PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
+                new CreditCardPaymentRequest(
+                        10000L,
+                        "1234-5678-9012-3456",
+                        "invalid-expiry-date",
+                        "123",
+                        "VISA"
+                )
         );
 
         // when & then
-        assertThatThrownBy(() -> paymentProcessor.process(paymentRequest))
+        assertThatThrownBy(() -> paymentProcessor.process(paymentContext))
                 .isInstanceOf(CoreException.class)
                 .hasMessage(ErrorType.INVALID_PAYMENT_CARD_EXPIRY.getMessage())
                 .hasFieldOrPropertyWithValue("errorType", ErrorType.INVALID_PAYMENT_CARD_EXPIRY);
@@ -146,16 +171,18 @@ class PaymentProcessorTest {
     @Test
     void testPaymentProcess_withInvalidCardCvc_shouldThrowCoreException() {
         // given
-        PaymentRequest paymentRequest = new PaymentRequest(
-                10000L,
-                "1234-5678-9012-3456",
-                "12/25",
-                "invalid-cvc",
-                "VISA"
+        PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
+                new CreditCardPaymentRequest(
+                        10000L,
+                        "1234-5678-9012-3456",
+                        "12/25",
+                        "invalid-cvc",
+                        "VISA"
+                )
         );
 
         // when & then
-        assertThatThrownBy(() -> paymentProcessor.process(paymentRequest))
+        assertThatThrownBy(() -> paymentProcessor.process(paymentContext))
                 .isInstanceOf(CoreException.class)
                 .hasMessage(ErrorType.INVALID_PAYMENT_CARD_CVC.getMessage())
                 .hasFieldOrPropertyWithValue("errorType", ErrorType.INVALID_PAYMENT_CARD_CVC);

@@ -1,10 +1,10 @@
 package io.hello.demo.paymentapi.domain.processor.v2;
 
 import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
-import io.hello.demo.paymentapi.domain.PaymentRequest;
+import io.hello.demo.paymentapi.domain.request.v1.PaymentRequest;
 import io.hello.demo.paymentapi.domain.PaymentResult;
 import io.hello.demo.paymentapi.domain.PaymentStatus;
-import io.hello.demo.paymentapi.domain.validator.PaymentValidator;
+import io.hello.demo.paymentapi.domain.validator.v1.PaymentValidator;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
