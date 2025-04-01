@@ -4,14 +4,11 @@ import io.hello.demo.paymentapi.domain.PaymentProcessor;
 import io.hello.demo.paymentapi.domain.PaymentRequest;
 import io.hello.demo.paymentapi.domain.PaymentResult;
 import io.hello.demo.paymentapi.domain.PaymentStatus;
-import io.hello.demo.paymentapi.support.error.CoreException;
-import io.hello.demo.paymentapi.support.error.ErrorType;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @Service
 public class DefaultPaymentProcessorV2 implements PaymentProcessor {

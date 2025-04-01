@@ -1,7 +1,9 @@
 package io.hello.demo.paymentapi.domain;
 
-import io.hello.demo.paymentapi.domain.v1.DefaultPaymentProcessorV1;
-import io.hello.demo.paymentapi.domain.v2.*;
+import io.hello.demo.paymentapi.domain.v3.DefaultPaymentProcessorV3;
+import io.hello.demo.paymentapi.domain.v3.generator.TransactionIdGenerator;
+import io.hello.demo.paymentapi.domain.v3.generator.UuidTransactionIdGenerator;
+import io.hello.demo.paymentapi.domain.v3.validator.*;
 import io.hello.demo.paymentapi.support.error.CoreException;
 import io.hello.demo.paymentapi.support.error.ErrorType;
 
@@ -21,6 +23,9 @@ class PaymentProcessorTest {
 
     @BeforeEach
     void setUp() {
+
+        TransactionIdGenerator transactionIdGenerator = new UuidTransactionIdGenerator();
+
         List<PaymentValidator> validators = List.of(
                 new AmountValidator(),
                 new CardNumberValidator(),
@@ -28,8 +33,11 @@ class PaymentProcessorTest {
                 new CardCvcValidator()
         );
 
+
+
 //        paymentProcessor = new DefaultPaymentProcessorV1();
-        paymentProcessor = new DefaultPaymentProcessorV2(validators);
+//        paymentProcessor = new DefaultPaymentProcessorV2(validators);
+        paymentProcessor = new DefaultPaymentProcessorV3(transactionIdGenerator, validators);
     }
 
 

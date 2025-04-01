@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.regex.Pattern;
 
 @Component
-public class CardNumberValidator implements PaymentValidator{
+public class CardNumberValidator implements PaymentValidator {
 
     private static final Pattern CARD_NUMBER_PATTERN = Pattern.compile("^\\d{4}-\\d{4}-\\d{4}-\\d{4}$");
 

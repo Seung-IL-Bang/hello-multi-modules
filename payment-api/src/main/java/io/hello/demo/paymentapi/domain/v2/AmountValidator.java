@@ -6,7 +6,7 @@ import io.hello.demo.paymentapi.support.error.ErrorType;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AmountValidator implements PaymentValidator{
+public class AmountValidator implements PaymentValidator {
     @Override
     public void validate(PaymentRequest request) {
         if (request.amount() < 0) {

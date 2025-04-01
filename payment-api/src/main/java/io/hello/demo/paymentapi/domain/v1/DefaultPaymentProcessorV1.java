@@ -6,7 +6,6 @@ import io.hello.demo.paymentapi.domain.PaymentResult;
 import io.hello.demo.paymentapi.domain.PaymentStatus;
 import io.hello.demo.paymentapi.support.error.CoreException;
 import io.hello.demo.paymentapi.support.error.ErrorType;
-
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

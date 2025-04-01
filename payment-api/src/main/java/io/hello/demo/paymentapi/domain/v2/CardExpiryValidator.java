@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.regex.Pattern;
 
 @Component
-public class CardExpiryValidator implements PaymentValidator{
+public class CardExpiryValidator implements PaymentValidator {
 
     private static final Pattern CARD_EXPIRY_PATTERN = Pattern.compile("^(0[1-9]|1[0-2])/\\d{2}$");
 
