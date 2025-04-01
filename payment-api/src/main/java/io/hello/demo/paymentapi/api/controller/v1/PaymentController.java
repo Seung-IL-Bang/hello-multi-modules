@@ -2,7 +2,7 @@ package io.hello.demo.paymentapi.api.controller.v1;
 
 import io.hello.demo.paymentapi.api.controller.v1.request.PaymentRequestDto;
 import io.hello.demo.paymentapi.api.controller.v1.response.PaymentResultDto;
-import io.hello.demo.paymentapi.domain.PaymentProcessor;
+import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
 import io.hello.demo.paymentapi.domain.PaymentResult;
 import io.hello.demo.paymentapi.support.response.ApiResponse;
 

@@ -1,6 +1,6 @@
-package io.hello.demo.paymentapi.domain.v1;
+package io.hello.demo.paymentapi.domain.processor.v1;
 
-import io.hello.demo.paymentapi.domain.PaymentProcessor;
+import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
 import io.hello.demo.paymentapi.domain.PaymentRequest;
 import io.hello.demo.paymentapi.domain.PaymentResult;
 import io.hello.demo.paymentapi.domain.PaymentStatus;

@@ -4,7 +4,8 @@ import io.hello.demo.inventoryapi.DefaultInventoryService;
 import io.hello.demo.inventoryapi.InventoryService;
 import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
 import io.hello.demo.paymentapi.domain.generator.UuidTransactionIdGenerator;
-import io.hello.demo.paymentapi.domain.v3.DefaultPaymentProcessorV3;
+import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
+import io.hello.demo.paymentapi.domain.processor.v3.DefaultPaymentProcessorV3;
 import io.hello.demo.paymentapi.domain.validator.*;
 
 import org.junit.jupiter.api.BeforeEach;

@@ -2,6 +2,7 @@ package io.hello.demo.paymentapi.domain;
 
 import io.hello.demo.inventoryapi.InventoryService;
 import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
+import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
