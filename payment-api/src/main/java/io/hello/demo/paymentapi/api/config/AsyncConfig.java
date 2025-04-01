@@ -21,7 +21,7 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(10);
         executor.initialize();
-        return AsyncConfigurer.super.getAsyncExecutor();
+        return executor;
     }
 
     @Override
