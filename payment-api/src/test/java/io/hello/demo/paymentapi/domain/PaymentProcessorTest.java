@@ -1,5 +1,7 @@
 package io.hello.demo.paymentapi.domain;
 
+import io.hello.demo.paymentapi.domain.v1.DefaultPaymentProcessorV1;
+import io.hello.demo.paymentapi.domain.v2.*;
 import io.hello.demo.paymentapi.support.error.CoreException;
 import io.hello.demo.paymentapi.support.error.ErrorType;
 
@@ -7,17 +9,27 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
-class DefaultPaymentProcessorTest {
+class PaymentProcessorTest {
 
-    private DefaultPaymentProcessor paymentProcessor;
+    private PaymentProcessor paymentProcessor;
 
     @BeforeEach
     void setUp() {
-        paymentProcessor = new DefaultPaymentProcessor();
+        List<PaymentValidator> validators = List.of(
+                new AmountValidator(),
+                new CardNumberValidator(),
+                new CardExpiryValidator(),
+                new CardCvcValidator()
+        );
+
+//        paymentProcessor = new DefaultPaymentProcessorV1();
+        paymentProcessor = new DefaultPaymentProcessorV2(validators);
     }
 
 
