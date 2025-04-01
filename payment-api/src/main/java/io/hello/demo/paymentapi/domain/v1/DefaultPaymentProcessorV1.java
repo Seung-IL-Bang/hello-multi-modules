@@ -1,5 +1,9 @@
-package io.hello.demo.paymentapi.domain;
+package io.hello.demo.paymentapi.domain.v1;
 
+import io.hello.demo.paymentapi.domain.PaymentProcessor;
+import io.hello.demo.paymentapi.domain.PaymentRequest;
+import io.hello.demo.paymentapi.domain.PaymentResult;
+import io.hello.demo.paymentapi.domain.PaymentStatus;
 import io.hello.demo.paymentapi.support.error.CoreException;
 import io.hello.demo.paymentapi.support.error.ErrorType;
 
@@ -10,7 +14,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 @Service
-public class DefaultPaymentProcessor implements PaymentProcessor {
+public class DefaultPaymentProcessorV1 implements PaymentProcessor {
 
     private static final Pattern CARD_NUMBER_PATTERN = Pattern.compile("^\\d{4}-\\d{4}-\\d{4}-\\d{4}$");
     private static final Pattern CARD_EXPIRY_PATTERN = Pattern.compile("^(0[1-9]|1[0-2])/\\d{2}$");
