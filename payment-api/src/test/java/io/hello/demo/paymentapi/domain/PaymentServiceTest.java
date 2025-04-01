@@ -21,13 +21,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ConcurrentPaymentServiceTest {
+class PaymentServiceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ConcurrentPaymentServiceTest.class);
+    private static final Logger log = LoggerFactory.getLogger(PaymentServiceTest.class);
 
     private InventoryService inventoryService;
 
-    private ConcurrentPaymentService concurrentPaymentService;
+    private PaymentService paymentService;
 
     @BeforeEach
     void setUp() {
@@ -42,7 +42,7 @@ class ConcurrentPaymentServiceTest {
 
         inventoryService = new DefaultInventoryService();
         PaymentProcessor paymentProcessor = new DefaultPaymentProcessorV3(transactionIdGenerator, validators);
-        concurrentPaymentService = new ConcurrentPaymentServiceImpl(transactionIdGenerator, paymentProcessor, inventoryService);
+        paymentService = new PaymentServiceImpl(transactionIdGenerator, paymentProcessor, inventoryService);
     }
 
     @DisplayName("재고가 50개인 상품을 100번의 동시 결제 요청이 들어오면 정확히 50번만 성공하고 남은 재고는 0이어야 한다.")
@@ -79,7 +79,7 @@ class ConcurrentPaymentServiceTest {
 
                         readyLatch.countDown();
                         startLatch.await();
-                        PaymentResult result = concurrentPaymentService.processPayment(request, productId, 1);
+                        PaymentResult result = paymentService.processPayment(request, productId, 1);
                         if (result.status() == PaymentStatus.APPROVED) {
                             successCount.incrementAndGet();
                             log.info("Payment approved Thread-{} : {}", count, result.transactionId());

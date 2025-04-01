@@ -6,15 +6,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConcurrentPaymentServiceImpl implements ConcurrentPaymentService {
+public class PaymentServiceImpl implements PaymentService {
 
     private final TransactionIdGenerator transactionIdGenerator;
     private final PaymentProcessor paymentProcessor;
     private final InventoryService inventoryService;
 
-    public ConcurrentPaymentServiceImpl(TransactionIdGenerator transactionIdGenerator,
-                                        @Qualifier("defaultPaymentProcessorV3") PaymentProcessor paymentProcessor,
-                                        InventoryService inventoryService) {
+    public PaymentServiceImpl(TransactionIdGenerator transactionIdGenerator,
+                              @Qualifier("defaultPaymentProcessorV3") PaymentProcessor paymentProcessor,
+                              InventoryService inventoryService) {
         this.transactionIdGenerator = transactionIdGenerator;
         this.paymentProcessor = paymentProcessor;
         this.inventoryService = inventoryService;

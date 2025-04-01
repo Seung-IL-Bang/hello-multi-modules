@@ -1,5 +1,5 @@
 package io.hello.demo.paymentapi.domain;
 
-public interface ConcurrentPaymentService {
+public interface PaymentService {
     PaymentResult processPayment(PaymentRequest request, String productId, int quantity);
 }
