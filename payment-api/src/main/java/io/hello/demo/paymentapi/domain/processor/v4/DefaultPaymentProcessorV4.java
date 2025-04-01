@@ -19,7 +19,6 @@ public class DefaultPaymentProcessorV4 implements PaymentProcessorV2 {
     @Override
     public PaymentResult process(PaymentContext paymentContext) {
         PaymentMethod paymentMethod = paymentMethodFactory.getPaymentMethod(paymentContext.paymentMethodType());
-        paymentMethod.validate(paymentContext.paymentRequest());
         return paymentMethod.pay(paymentContext.paymentRequest());
     }
 }
