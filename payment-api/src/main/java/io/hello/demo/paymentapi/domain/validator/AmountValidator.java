@@ -1,4 +1,4 @@
-package io.hello.demo.paymentapi.domain.v2;
+package io.hello.demo.paymentapi.domain.validator;
 
 import io.hello.demo.paymentapi.domain.PaymentRequest;
 import io.hello.demo.paymentapi.support.error.CoreException;

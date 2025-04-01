@@ -1,4 +1,4 @@
-package io.hello.demo.paymentapi.domain.v3.generator;
+package io.hello.demo.paymentapi.domain.generator;
 
 public interface TransactionIdGenerator {
     String generate();

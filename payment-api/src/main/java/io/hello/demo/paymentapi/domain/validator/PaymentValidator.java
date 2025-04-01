@@ -1,4 +1,4 @@
-package io.hello.demo.paymentapi.domain.v3.validator;
+package io.hello.demo.paymentapi.domain.validator;
 
 import io.hello.demo.paymentapi.domain.PaymentRequest;
 

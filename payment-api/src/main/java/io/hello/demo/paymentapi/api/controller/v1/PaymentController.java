@@ -6,6 +6,7 @@ import io.hello.demo.paymentapi.domain.PaymentProcessor;
 import io.hello.demo.paymentapi.domain.PaymentResult;
 import io.hello.demo.paymentapi.support.response.ApiResponse;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,7 @@ public class PaymentController {
 
     private final PaymentProcessor paymentProcessor;
 
-    public PaymentController(PaymentProcessor paymentProcessor) {
+    public PaymentController(@Qualifier("defaultPaymentProcessorV3") PaymentProcessor paymentProcessor) {
         this.paymentProcessor = paymentProcessor;
     }
 

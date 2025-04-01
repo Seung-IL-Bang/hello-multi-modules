@@ -4,8 +4,8 @@ import io.hello.demo.paymentapi.domain.PaymentProcessor;
 import io.hello.demo.paymentapi.domain.PaymentRequest;
 import io.hello.demo.paymentapi.domain.PaymentResult;
 import io.hello.demo.paymentapi.domain.PaymentStatus;
-import io.hello.demo.paymentapi.domain.v3.generator.TransactionIdGenerator;
-import io.hello.demo.paymentapi.domain.v3.validator.PaymentValidator;
+import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
+import io.hello.demo.paymentapi.domain.validator.PaymentValidator;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
