@@ -1,4 +1,4 @@
-package io.hello.demo.paymentapi.api.controller;
+package io.hello.demo.paymentapi.api;
 
 import io.hello.demo.paymentapi.support.error.CoreException;
 import io.hello.demo.paymentapi.support.error.ErrorType;

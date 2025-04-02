@@ -1,7 +1,7 @@
 package io.hello.demo.paymentapi.api.controller.request;
 
-import io.hello.demo.paymentapi.domain.request.v2.MobilePaymentRequest;
-import io.hello.demo.paymentapi.domain.request.v2.PaymentRequest;
+import io.hello.demo.paymentapi.domain.request.MobilePaymentRequest;
+import io.hello.demo.paymentapi.domain.request.PaymentRequest;
 
 public record MobilePaymentRequestInfo(
         Long amount,

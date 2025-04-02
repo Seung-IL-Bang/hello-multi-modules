@@ -2,7 +2,7 @@ package io.hello.demo.paymentapi.domain;
 
 import io.hello.demo.inventoryapi.InventoryService;
 import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
-import io.hello.demo.paymentapi.domain.processor.PaymentProcessorV2;
+import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
 import org.springframework.stereotype.Service;
 
 
@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 public class PaymentServiceImpl implements PaymentService {
 
     private final TransactionIdGenerator transactionIdGenerator;
-    private final PaymentProcessorV2 paymentProcessor;
+    private final PaymentProcessor paymentProcessor;
     private final InventoryService inventoryService;
     private final PaymentResultEventService paymentResultEventService;
 
     public PaymentServiceImpl(TransactionIdGenerator transactionIdGenerator,
-                              PaymentProcessorV2 paymentProcessor,
+                              PaymentProcessor paymentProcessor,
                               InventoryService inventoryService,
                               PaymentResultEventService paymentResultEventService) {
         this.transactionIdGenerator = transactionIdGenerator;

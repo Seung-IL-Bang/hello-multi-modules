@@ -3,14 +3,14 @@ package io.hello.demo.paymentapi.domain;
 import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
 import io.hello.demo.paymentapi.domain.generator.UuidTransactionIdGenerator;
 import io.hello.demo.paymentapi.domain.method.*;
-import io.hello.demo.paymentapi.domain.processor.PaymentProcessorV2;
-import io.hello.demo.paymentapi.domain.processor.v4.DefaultPaymentProcessorV4;
-import io.hello.demo.paymentapi.domain.request.v2.CreditCardPaymentRequest;
-import io.hello.demo.paymentapi.domain.validator.v2.PaymentMethodValidator;
-import io.hello.demo.paymentapi.domain.validator.v2.creditcard.AmountValidator;
-import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardCvcValidator;
-import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardExpiryValidator;
-import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardNumberValidator;
+import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
+import io.hello.demo.paymentapi.domain.processor.DefaultPaymentProcessor;
+import io.hello.demo.paymentapi.domain.request.CreditCardPaymentRequest;
+import io.hello.demo.paymentapi.domain.validator.PaymentMethodValidator;
+import io.hello.demo.paymentapi.domain.validator.creditcard.AmountValidator;
+import io.hello.demo.paymentapi.domain.validator.creditcard.CardCvcValidator;
+import io.hello.demo.paymentapi.domain.validator.creditcard.CardExpiryValidator;
+import io.hello.demo.paymentapi.domain.validator.creditcard.CardNumberValidator;
 import io.hello.demo.paymentapi.support.error.ErrorType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CreditCardPaymentMethodTest {
 
-    private PaymentProcessorV2 paymentProcessor;
+    private PaymentProcessor paymentProcessor;
     private TransactionIdGenerator transactionIdGenerator;
 
     @BeforeEach
@@ -43,7 +43,7 @@ class CreditCardPaymentMethodTest {
         transactionIdGenerator = new UuidTransactionIdGenerator();
 
         PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory(paymentMethods);
-        paymentProcessor = new DefaultPaymentProcessorV4(paymentMethodFactory);
+        paymentProcessor = new DefaultPaymentProcessor(paymentMethodFactory);
     }
 
 

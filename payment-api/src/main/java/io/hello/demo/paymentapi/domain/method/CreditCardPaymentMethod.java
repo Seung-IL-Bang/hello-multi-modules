@@ -1,10 +1,9 @@
 package io.hello.demo.paymentapi.domain.method;
 
 import io.hello.demo.paymentapi.domain.PaymentStatus;
-import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
-import io.hello.demo.paymentapi.domain.request.v2.PaymentRequest;
+import io.hello.demo.paymentapi.domain.request.PaymentRequest;
 import io.hello.demo.paymentapi.domain.PaymentResult;
-import io.hello.demo.paymentapi.domain.validator.v2.PaymentMethodValidator;
+import io.hello.demo.paymentapi.domain.validator.PaymentMethodValidator;
 import io.hello.demo.paymentapi.support.error.CoreException;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
 package io.hello.demo.paymentapi.api.controller.request;
 
-import io.hello.demo.paymentapi.domain.request.v2.PaymentRequest;
-import io.hello.demo.paymentapi.domain.request.v2.VirtualAccountPaymentRequest;
+import io.hello.demo.paymentapi.domain.request.PaymentRequest;
+import io.hello.demo.paymentapi.domain.request.VirtualAccountPaymentRequest;
 
 public record VirtualAccountPaymentRequestInfo(
         Long amount,

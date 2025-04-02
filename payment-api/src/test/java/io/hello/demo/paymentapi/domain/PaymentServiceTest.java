@@ -5,14 +5,14 @@ import io.hello.demo.inventoryapi.InventoryService;
 import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
 import io.hello.demo.paymentapi.domain.generator.UuidTransactionIdGenerator;
 import io.hello.demo.paymentapi.domain.method.*;
-import io.hello.demo.paymentapi.domain.processor.PaymentProcessorV2;
-import io.hello.demo.paymentapi.domain.processor.v4.DefaultPaymentProcessorV4;
-import io.hello.demo.paymentapi.domain.request.v2.CreditCardPaymentRequest;
-import io.hello.demo.paymentapi.domain.validator.v2.PaymentMethodValidator;
-import io.hello.demo.paymentapi.domain.validator.v2.creditcard.AmountValidator;
-import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardCvcValidator;
-import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardExpiryValidator;
-import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardNumberValidator;
+import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
+import io.hello.demo.paymentapi.domain.processor.DefaultPaymentProcessor;
+import io.hello.demo.paymentapi.domain.request.CreditCardPaymentRequest;
+import io.hello.demo.paymentapi.domain.validator.PaymentMethodValidator;
+import io.hello.demo.paymentapi.domain.validator.creditcard.AmountValidator;
+import io.hello.demo.paymentapi.domain.validator.creditcard.CardCvcValidator;
+import io.hello.demo.paymentapi.domain.validator.creditcard.CardExpiryValidator;
+import io.hello.demo.paymentapi.domain.validator.creditcard.CardNumberValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 class PaymentServiceTest {
@@ -65,7 +64,7 @@ class PaymentServiceTest {
 
         PaymentResultEventService paymentResultEventService = new PaymentResultEventService(restTemplateMock);
 
-        PaymentProcessorV2 paymentProcessor = new DefaultPaymentProcessorV4(paymentMethodFactory);
+        PaymentProcessor paymentProcessor = new DefaultPaymentProcessor(paymentMethodFactory);
         paymentService = new PaymentServiceImpl(transactionIdGenerator, paymentProcessor, inventoryService, paymentResultEventService);
     }
 

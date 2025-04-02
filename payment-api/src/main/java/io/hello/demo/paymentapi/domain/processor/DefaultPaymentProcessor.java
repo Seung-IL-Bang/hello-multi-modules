@@ -1,18 +1,17 @@
-package io.hello.demo.paymentapi.domain.processor.v4;
+package io.hello.demo.paymentapi.domain.processor;
 
 import io.hello.demo.paymentapi.domain.PaymentContext;
 import io.hello.demo.paymentapi.domain.PaymentResult;
 import io.hello.demo.paymentapi.domain.method.PaymentMethod;
 import io.hello.demo.paymentapi.domain.method.PaymentMethodFactory;
-import io.hello.demo.paymentapi.domain.processor.PaymentProcessorV2;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DefaultPaymentProcessorV4 implements PaymentProcessorV2 {
+public class DefaultPaymentProcessor implements PaymentProcessor {
 
     private final PaymentMethodFactory paymentMethodFactory;
 
-    public DefaultPaymentProcessorV4(PaymentMethodFactory paymentMethodFactory) {
+    public DefaultPaymentProcessor(PaymentMethodFactory paymentMethodFactory) {
         this.paymentMethodFactory = paymentMethodFactory;
     }
 

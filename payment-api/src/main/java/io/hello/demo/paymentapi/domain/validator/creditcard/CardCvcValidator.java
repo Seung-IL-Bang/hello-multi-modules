@@ -1,8 +1,8 @@
-package io.hello.demo.paymentapi.domain.validator.v2.creditcard;
+package io.hello.demo.paymentapi.domain.validator.creditcard;
 
-import io.hello.demo.paymentapi.domain.request.v2.CreditCardPaymentRequest;
-import io.hello.demo.paymentapi.domain.request.v2.PaymentRequest;
-import io.hello.demo.paymentapi.domain.validator.v2.PaymentMethodValidator;
+import io.hello.demo.paymentapi.domain.request.CreditCardPaymentRequest;
+import io.hello.demo.paymentapi.domain.request.PaymentRequest;
+import io.hello.demo.paymentapi.domain.validator.PaymentMethodValidator;
 import io.hello.demo.paymentapi.support.error.CoreException;
 import io.hello.demo.paymentapi.support.error.ErrorType;
 
