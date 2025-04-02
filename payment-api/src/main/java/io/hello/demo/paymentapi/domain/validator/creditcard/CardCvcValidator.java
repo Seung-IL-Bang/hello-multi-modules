@@ -22,4 +22,9 @@ public class CardCvcValidator implements PaymentMethodValidator {
             throw new CoreException(ErrorType.DEFAULT_ERROR); // todo add error type
         }
     }
+
+    @Override
+    public boolean supports(PaymentRequest request) {
+        return request instanceof CreditCardPaymentRequest;
+    }
 }

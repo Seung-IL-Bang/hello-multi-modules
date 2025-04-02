@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 public class VirtualAccountPaymentMethod implements PaymentMethod {
 
     @Override
-    public boolean validate(PaymentRequest request) {
-        return false;
+    public void validate(PaymentRequest request) {
     }
 
     @Override

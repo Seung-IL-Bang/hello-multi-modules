@@ -7,6 +7,7 @@ import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
 import io.hello.demo.paymentapi.domain.processor.DefaultPaymentProcessor;
 import io.hello.demo.paymentapi.domain.request.CreditCardPaymentRequest;
 import io.hello.demo.paymentapi.domain.validator.PaymentMethodValidator;
+import io.hello.demo.paymentapi.domain.validator.PaymentMethodValidatorFactory;
 import io.hello.demo.paymentapi.domain.validator.creditcard.AmountValidator;
 import io.hello.demo.paymentapi.domain.validator.creditcard.CardCvcValidator;
 import io.hello.demo.paymentapi.domain.validator.creditcard.CardExpiryValidator;
@@ -28,14 +29,16 @@ class CreditCardPaymentMethodTest {
 
     @BeforeEach
     void setUp() {
-        List<PaymentMethodValidator> validators = List.of(
-                new AmountValidator(),
+
+        PaymentMethodValidatorFactory creditCardMethodValidatorFactory = new PaymentMethodValidatorFactory(List.of(
                 new CardNumberValidator(),
+                new CardCvcValidator(),
                 new CardExpiryValidator(),
-                new CardCvcValidator()
-        );
+                new AmountValidator()
+        ));
+
         List<PaymentMethod> paymentMethods = List.of(
-                new CreditCardPaymentMethod(validators),
+                new CreditCardPaymentMethod(creditCardMethodValidatorFactory),
                 new VirtualAccountPaymentMethod(),
                 new MobilePaymentMethod()
         );

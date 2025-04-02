@@ -9,6 +9,7 @@ import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
 import io.hello.demo.paymentapi.domain.processor.DefaultPaymentProcessor;
 import io.hello.demo.paymentapi.domain.request.CreditCardPaymentRequest;
 import io.hello.demo.paymentapi.domain.validator.PaymentMethodValidator;
+import io.hello.demo.paymentapi.domain.validator.PaymentMethodValidatorFactory;
 import io.hello.demo.paymentapi.domain.validator.creditcard.AmountValidator;
 import io.hello.demo.paymentapi.domain.validator.creditcard.CardCvcValidator;
 import io.hello.demo.paymentapi.domain.validator.creditcard.CardExpiryValidator;
@@ -30,9 +31,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-class PaymentServiceTest {
+class ConcurrentPaymentServiceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(PaymentServiceTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ConcurrentPaymentServiceTest.class);
 
     private InventoryService inventoryService;
 
@@ -42,17 +43,15 @@ class PaymentServiceTest {
     void setUp() {
         TransactionIdGenerator transactionIdGenerator = new UuidTransactionIdGenerator();
 
-        List<PaymentMethodValidator> validators = List.of(
-                new AmountValidator(),
+        PaymentMethodValidatorFactory creditCardMethodValidatorFactory = new PaymentMethodValidatorFactory(List.of(
                 new CardNumberValidator(),
+                new CardCvcValidator(),
                 new CardExpiryValidator(),
-                new CardCvcValidator()
-        );
+                new AmountValidator()
+        ));
 
         List<PaymentMethod> paymentMethods = List.of(
-                new CreditCardPaymentMethod(validators),
-                new VirtualAccountPaymentMethod(),
-                new MobilePaymentMethod()
+                new CreditCardPaymentMethod(creditCardMethodValidatorFactory)
         );
 
         PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory(paymentMethods);
@@ -66,31 +65,6 @@ class PaymentServiceTest {
 
         PaymentProcessor paymentProcessor = new DefaultPaymentProcessor(paymentMethodFactory);
         paymentService = new PaymentServiceImpl(transactionIdGenerator, paymentProcessor, inventoryService, paymentResultEventService);
-    }
-
-    @DisplayName("재고가 남아 있는 상품에 대해 결제 승인 처리될 경우, 유저에게 결제 승인 알림이 전송된다.")
-    @Test
-    void testPaymentProcess_withAvailableInventory_shouldSendApprovalNotification() {
-        // given
-        String productId = "product-1";
-        int quantity = 1;
-
-        PaymentContext paymentContext = new PaymentContext(
-                PaymentMethodType.CREDIT_CARD,
-                new CreditCardPaymentRequest(
-                        1000L,
-                        "1234-5678-9012-3456",
-                        "12/25",
-                        "123",
-                        "merchant-1"
-                )
-        );
-
-        // when
-        PaymentResult result = paymentService.processPayment(paymentContext, productId, quantity);
-
-        // then
-        assertThat(result.status()).isEqualTo(PaymentStatus.APPROVED);
     }
 
     @DisplayName("재고가 50개인 상품을 100번의 동시 결제 요청이 들어오면 정확히 50번만 성공하고 남은 재고는 0이어야 한다.")

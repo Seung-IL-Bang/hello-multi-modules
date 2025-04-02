@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 public class PaymentServiceImpl implements PaymentService {
 
     private final TransactionIdGenerator transactionIdGenerator;
-    private final PaymentProcessor paymentProcessor;
     private final InventoryService inventoryService;
+    private final PaymentProcessor paymentProcessor;
     private final PaymentResultEventService paymentResultEventService;
 
     public PaymentServiceImpl(TransactionIdGenerator transactionIdGenerator,

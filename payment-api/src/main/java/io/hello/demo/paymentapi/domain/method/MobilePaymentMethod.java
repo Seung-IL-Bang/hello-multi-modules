@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MobilePaymentMethod implements PaymentMethod{
     @Override
-    public boolean validate(PaymentRequest request) {
-        return false;
+    public void validate(PaymentRequest request) {
+
     }
 
     @Override
