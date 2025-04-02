@@ -3,12 +3,7 @@ package io.hello.demo.paymentapi.domain;
 import io.hello.demo.inventoryapi.InventoryService;
 import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
 import io.hello.demo.paymentapi.domain.processor.PaymentProcessorV2;
-import io.hello.demo.sseapi.PaymentResultEvent;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.time.LocalDateTime;
 
 
 @Service
@@ -17,55 +12,54 @@ public class PaymentServiceImpl implements PaymentService {
     private final TransactionIdGenerator transactionIdGenerator;
     private final PaymentProcessorV2 paymentProcessor;
     private final InventoryService inventoryService;
+    private final PaymentResultEventService paymentResultEventService;
 
     public PaymentServiceImpl(TransactionIdGenerator transactionIdGenerator,
-                              @Qualifier("defaultPaymentProcessorV4") PaymentProcessorV2 paymentProcessor,
-                              InventoryService inventoryService) {
+                              PaymentProcessorV2 paymentProcessor,
+                              InventoryService inventoryService,
+                              PaymentResultEventService paymentResultEventService) {
         this.transactionIdGenerator = transactionIdGenerator;
         this.paymentProcessor = paymentProcessor;
         this.inventoryService = inventoryService;
+        this.paymentResultEventService = paymentResultEventService;
     }
 
 
     @Override
     public PaymentResult processPayment(PaymentContext paymentContext, String productId, int quantity) {
+        String transactionId = transactionIdGenerator.generate();
 
-        boolean inventoryReserved = inventoryService.checkAndReserveInventory(productId, quantity);
-
-        if (!inventoryReserved) {
-            return new PaymentResult.Builder()
-                    .transactionId(transactionIdGenerator.generate())
-                    .status(PaymentStatus.DECLINED)
-                    .errorCode("INSUFFICIENT_INVENTORY")
-                    .errorMessage("Insufficient inventory")
-                    .build();
+        // Check and reserve inventory
+        if (!inventoryService.checkAndReserveInventory(productId, quantity)) {
+            PaymentResult result = createDeclinedResult(transactionId);
+            paymentResultEventService.sendPaymentResultEvent(result);
+            return result;
         }
 
-        PaymentResult result = paymentProcessor.process(paymentContext);
+        try {
+            // Process payment
+            PaymentResult result = paymentProcessor.process(paymentContext, transactionId);
 
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8080/api/v1/sse/send/payment-result";
+            // Send payment result event
+            paymentResultEventService.sendPaymentResultEvent(result);
 
-        if (result.status() == PaymentStatus.APPROVED) {
-            PaymentResultEvent paymentResultEvent = new PaymentResultEvent(
-                    "user-1",
-                    result.transactionId(),
-                    true,
-                    PaymentStatus.APPROVED.name(),
-                    LocalDateTime.now().toString()
-            );
-            restTemplate.postForObject(url, paymentResultEvent, Void.class);
-        } else {
-            PaymentResultEvent paymentResultEvent = new PaymentResultEvent(
-                    "user-1",
-                    result.transactionId(),
-                    false,
-                    PaymentStatus.DECLINED.name(),
-                    LocalDateTime.now().toString()
-            );
-            restTemplate.postForObject(url, paymentResultEvent, Void.class);
+            return result;
+        } catch (Exception e) {
+            // Rollback inventory reservation
+            inventoryService.rollbackInventory(productId, quantity);
+
+            PaymentResult result = createDeclinedResult(transactionId);
+            paymentResultEventService.sendPaymentResultEvent(result);
+            return result;
         }
+    }
 
-        return result; // 결제 처리
+    private static PaymentResult createDeclinedResult(String transactionId) {
+        return new PaymentResult.Builder()
+                .transactionId(transactionId)
+                .status(PaymentStatus.DECLINED)
+                .errorCode("INSUFFICIENT_INVENTORY")
+                .errorMessage("Insufficient inventory")
+                .build();
     }
 }

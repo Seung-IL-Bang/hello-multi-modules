@@ -8,17 +8,18 @@ import io.hello.demo.paymentapi.domain.method.*;
 import io.hello.demo.paymentapi.domain.processor.PaymentProcessorV2;
 import io.hello.demo.paymentapi.domain.processor.v4.DefaultPaymentProcessorV4;
 import io.hello.demo.paymentapi.domain.request.v2.CreditCardPaymentRequest;
+import io.hello.demo.paymentapi.domain.validator.v2.PaymentMethodValidator;
 import io.hello.demo.paymentapi.domain.validator.v2.creditcard.AmountValidator;
 import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardCvcValidator;
 import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardExpiryValidator;
 import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardNumberValidator;
-import io.hello.demo.paymentapi.domain.validator.v2.PaymentMethodValidator;
-import io.hello.demo.sseapi.SseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -27,6 +28,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 class PaymentServiceTest {
 
@@ -40,13 +43,6 @@ class PaymentServiceTest {
     void setUp() {
         TransactionIdGenerator transactionIdGenerator = new UuidTransactionIdGenerator();
 
-//        List<PaymentValidator> validators = List.of(
-//                new AmountValidator(),
-//                new CardNumberValidator(),
-//                new CardExpiryValidator(),
-//                new CardCvcValidator()
-//        );
-
         List<PaymentMethodValidator> validators = List.of(
                 new AmountValidator(),
                 new CardNumberValidator(),
@@ -55,7 +51,7 @@ class PaymentServiceTest {
         );
 
         List<PaymentMethod> paymentMethods = List.of(
-                new CreditCardPaymentMethod(validators, transactionIdGenerator),
+                new CreditCardPaymentMethod(validators),
                 new VirtualAccountPaymentMethod(),
                 new MobilePaymentMethod()
         );
@@ -63,10 +59,14 @@ class PaymentServiceTest {
         PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory(paymentMethods);
 
         inventoryService = new DefaultInventoryService();
-//        PaymentProcessor paymentProcessor = new DefaultPaymentProcessorV3(transactionIdGenerator, validators);
+
+        RestTemplate restTemplateMock = Mockito.mock(RestTemplate.class);
+        when(restTemplateMock.postForObject(Mockito.anyString(), Mockito.any(), Mockito.any())).thenReturn(null);
+
+        PaymentResultEventService paymentResultEventService = new PaymentResultEventService(restTemplateMock);
 
         PaymentProcessorV2 paymentProcessor = new DefaultPaymentProcessorV4(paymentMethodFactory);
-        paymentService = new PaymentServiceImpl(transactionIdGenerator, paymentProcessor, inventoryService);
+        paymentService = new PaymentServiceImpl(transactionIdGenerator, paymentProcessor, inventoryService, paymentResultEventService);
     }
 
     @DisplayName("재고가 남아 있는 상품에 대해 결제 승인 처리될 경우, 유저에게 결제 승인 알림이 전송된다.")

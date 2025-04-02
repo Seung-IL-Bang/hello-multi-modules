@@ -5,6 +5,6 @@ import io.hello.demo.paymentapi.domain.request.v2.PaymentRequest;
 
 public interface PaymentMethod {
     boolean validate(PaymentRequest request);
-    PaymentResult pay(PaymentRequest request);
+    PaymentResult pay(PaymentRequest request, String transactionId);
     boolean supports(PaymentMethodType type);
 }

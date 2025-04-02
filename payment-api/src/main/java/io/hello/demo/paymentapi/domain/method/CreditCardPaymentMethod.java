@@ -15,12 +15,9 @@ import java.util.List;
 public class CreditCardPaymentMethod implements PaymentMethod {
 
     private final List<PaymentMethodValidator> validators;
-    private final TransactionIdGenerator transactionIdGenerator;
 
-    public CreditCardPaymentMethod(List<PaymentMethodValidator> validators,
-                                   TransactionIdGenerator transactionIdGenerator) {
+    public CreditCardPaymentMethod(List<PaymentMethodValidator> validators) {
         this.validators = validators;
-        this.transactionIdGenerator = transactionIdGenerator;
     }
 
     @Override
@@ -30,12 +27,12 @@ public class CreditCardPaymentMethod implements PaymentMethod {
     }
 
     @Override
-    public PaymentResult pay(PaymentRequest request) {
+    public PaymentResult pay(PaymentRequest request, String transactionId) {
         try {
             validate(request);
         } catch (CoreException e) {
             return new PaymentResult.Builder()
-                    .transactionId(transactionIdGenerator.generate())
+                    .transactionId(transactionId)
                     .status(PaymentStatus.DECLINED)
                     .errorCode(e.getErrorType().getCode().name())
                     .errorMessage(e.getMessage())
@@ -43,7 +40,7 @@ public class CreditCardPaymentMethod implements PaymentMethod {
         }
 
         return new PaymentResult.Builder()
-                .transactionId(transactionIdGenerator.generate())
+                .transactionId(transactionId)
                 .status(PaymentStatus.APPROVED)
                 .approvedAt(LocalDateTime.now())
                 .build();

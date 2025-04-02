@@ -17,8 +17,8 @@ public class DefaultPaymentProcessorV4 implements PaymentProcessorV2 {
     }
 
     @Override
-    public PaymentResult process(PaymentContext paymentContext) {
+    public PaymentResult process(PaymentContext paymentContext, String transactionId) {
         PaymentMethod paymentMethod = paymentMethodFactory.getPaymentMethod(paymentContext.paymentMethodType());
-        return paymentMethod.pay(paymentContext.paymentRequest());
+        return paymentMethod.pay(paymentContext.paymentRequest(), transactionId);
     }
 }

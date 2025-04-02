@@ -13,7 +13,7 @@ public class VirtualAccountPaymentMethod implements PaymentMethod {
     }
 
     @Override
-    public PaymentResult pay(PaymentRequest request) {
+    public PaymentResult pay(PaymentRequest request, String transactionId) {
         return null;
     }
 

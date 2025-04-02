@@ -38,6 +38,19 @@ public class DefaultInventoryService implements InventoryService {
         }
     }
 
+    @Override
+    public void rollbackInventory(String productId, int quantity) {
+        Lock lock = productLocks.computeIfAbsent(productId, k -> new ReentrantLock());
+        try {
+            lock.lock();
+            Integer currentStock = productInventory.getOrDefault(productId, 0);
+            productInventory.put(productId, currentStock + quantity); // 재고 복원
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
     public int getInventory(String productId) {
         return productInventory.getOrDefault(productId, 0);
     }

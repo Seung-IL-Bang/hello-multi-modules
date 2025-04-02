@@ -1,4 +1,4 @@
-package io.hello.demo.paymentapi.api.controller.v1.response;
+package io.hello.demo.paymentapi.api.controller;
 
 import io.hello.demo.paymentapi.domain.PaymentResult;
 import io.hello.demo.paymentapi.domain.PaymentStatus;

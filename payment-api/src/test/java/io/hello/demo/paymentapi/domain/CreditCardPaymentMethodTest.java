@@ -24,10 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CreditCardPaymentMethodTest {
 
     private PaymentProcessorV2 paymentProcessor;
+    private TransactionIdGenerator transactionIdGenerator;
 
     @BeforeEach
     void setUp() {
-        TransactionIdGenerator transactionIdGenerator = new UuidTransactionIdGenerator();
         List<PaymentMethodValidator> validators = List.of(
                 new AmountValidator(),
                 new CardNumberValidator(),
@@ -35,10 +35,12 @@ class CreditCardPaymentMethodTest {
                 new CardCvcValidator()
         );
         List<PaymentMethod> paymentMethods = List.of(
-                new CreditCardPaymentMethod(validators, transactionIdGenerator),
+                new CreditCardPaymentMethod(validators),
                 new VirtualAccountPaymentMethod(),
                 new MobilePaymentMethod()
         );
+
+        transactionIdGenerator = new UuidTransactionIdGenerator();
 
         PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory(paymentMethods);
         paymentProcessor = new DefaultPaymentProcessorV4(paymentMethodFactory);
@@ -49,6 +51,7 @@ class CreditCardPaymentMethodTest {
     @Test
     void testPaymentProcess_withValidRequest_shouldReturnApprovedResult() {
         // given
+        String transactionId = transactionIdGenerator.generate();
         PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
                 new CreditCardPaymentRequest(
                         10000L,
@@ -60,7 +63,7 @@ class CreditCardPaymentMethodTest {
         );
 
         // when
-        PaymentResult result = paymentProcessor.process(paymentContext);
+        PaymentResult result = paymentProcessor.process(paymentContext, transactionId);
 
         // then
         assertThat(result.status()).isEqualTo(PaymentStatus.APPROVED);
@@ -74,6 +77,7 @@ class CreditCardPaymentMethodTest {
     @Test
     void testPaymentProcess_withInvalidAmount_shouldThrowCoreException() {
         // given
+        String transactionId = transactionIdGenerator.generate();
         PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
                 new CreditCardPaymentRequest(
                         -10000L,
@@ -85,7 +89,7 @@ class CreditCardPaymentMethodTest {
         );
 
         // when
-        PaymentResult result = paymentProcessor.process(paymentContext);
+        PaymentResult result = paymentProcessor.process(paymentContext, transactionId);
 
         // then
         assertThat(result.status()).isEqualTo(PaymentStatus.DECLINED);
@@ -99,6 +103,7 @@ class CreditCardPaymentMethodTest {
     @Test
     void testPaymentProcess_withZeroAmount_shouldReturnApprovedResult() {
         // given
+        String transactionId = transactionIdGenerator.generate();
         PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
                 new CreditCardPaymentRequest(
                         0L,
@@ -110,7 +115,7 @@ class CreditCardPaymentMethodTest {
         );
 
         // when
-        PaymentResult result = paymentProcessor.process(paymentContext);
+        PaymentResult result = paymentProcessor.process(paymentContext, transactionId);
 
         // then
         assertThat(result.status()).isEqualTo(PaymentStatus.APPROVED);
@@ -124,6 +129,7 @@ class CreditCardPaymentMethodTest {
     @Test
     void testPaymentProcess_withInvalidCardNumber_shouldThrowCoreException() {
         // given
+        String transactionId = transactionIdGenerator.generate();
         PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
                 new CreditCardPaymentRequest(
                         10000L,
@@ -135,7 +141,7 @@ class CreditCardPaymentMethodTest {
         );
 
         // when
-        PaymentResult result = paymentProcessor.process(paymentContext);
+        PaymentResult result = paymentProcessor.process(paymentContext, transactionId);
 
         // then
         assertThat(result.status()).isEqualTo(PaymentStatus.DECLINED);
@@ -149,6 +155,7 @@ class CreditCardPaymentMethodTest {
     @Test
     void testPaymentProcess_withInvalidCardExpiryDate_shouldThrowCoreException() {
         // given
+        String transactionId = transactionIdGenerator.generate();
         PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
                 new CreditCardPaymentRequest(
                         10000L,
@@ -160,7 +167,7 @@ class CreditCardPaymentMethodTest {
         );
 
         // when
-        PaymentResult result = paymentProcessor.process(paymentContext);
+        PaymentResult result = paymentProcessor.process(paymentContext, transactionId);
 
         // then
         assertThat(result.status()).isEqualTo(PaymentStatus.DECLINED);
@@ -174,6 +181,7 @@ class CreditCardPaymentMethodTest {
     @Test
     void testPaymentProcess_withInvalidCardCvc_shouldThrowCoreException() {
         // given
+        String transactionId = transactionIdGenerator.generate();
         PaymentContext paymentContext = new PaymentContext(PaymentMethodType.CREDIT_CARD,
                 new CreditCardPaymentRequest(
                         10000L,
@@ -185,7 +193,7 @@ class CreditCardPaymentMethodTest {
         );
 
         // when
-        PaymentResult result = paymentProcessor.process(paymentContext);
+        PaymentResult result = paymentProcessor.process(paymentContext, transactionId);
 
         // then
         assertThat(result.status()).isEqualTo(PaymentStatus.DECLINED);
