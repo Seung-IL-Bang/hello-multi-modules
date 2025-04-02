@@ -21,7 +21,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-class PaymentProcessorTest {
+class CreditCardPaymentMethodTest {
 
     private PaymentProcessorV2 paymentProcessor;
 
