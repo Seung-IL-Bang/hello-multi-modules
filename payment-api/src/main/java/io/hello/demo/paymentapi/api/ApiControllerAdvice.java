@@ -3,7 +3,6 @@ package io.hello.demo.paymentapi.api;
 import io.hello.demo.paymentapi.support.error.CoreException;
 import io.hello.demo.paymentapi.support.error.ErrorType;
 import io.hello.demo.paymentapi.support.response.ApiResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

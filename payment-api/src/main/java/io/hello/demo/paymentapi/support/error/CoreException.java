@@ -1,6 +1,6 @@
 package io.hello.demo.paymentapi.support.error;
 
-public class CoreException extends RuntimeException{
+public class CoreException extends RuntimeException {
 
     private final ErrorType errorType;
     private final Object data;

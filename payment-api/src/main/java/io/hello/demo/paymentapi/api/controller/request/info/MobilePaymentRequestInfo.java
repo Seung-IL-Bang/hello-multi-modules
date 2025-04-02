@@ -1,4 +1,4 @@
-package io.hello.demo.paymentapi.api.controller.request;
+package io.hello.demo.paymentapi.api.controller.request.info;
 
 import io.hello.demo.paymentapi.domain.request.MobilePaymentRequest;
 import io.hello.demo.paymentapi.domain.request.PaymentRequest;

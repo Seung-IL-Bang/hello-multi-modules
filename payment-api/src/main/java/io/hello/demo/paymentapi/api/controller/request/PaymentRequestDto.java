@@ -1,6 +1,9 @@
 package io.hello.demo.paymentapi.api.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.hello.demo.paymentapi.api.controller.request.info.CreditCardPaymentRequestInfo;
+import io.hello.demo.paymentapi.api.controller.request.info.MobilePaymentRequestInfo;
+import io.hello.demo.paymentapi.api.controller.request.info.VirtualAccountPaymentRequestInfo;
 import io.hello.demo.paymentapi.domain.method.PaymentMethodType;
 
 import java.math.BigDecimal;

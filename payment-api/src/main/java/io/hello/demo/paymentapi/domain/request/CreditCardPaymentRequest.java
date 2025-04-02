@@ -6,5 +6,5 @@ public record CreditCardPaymentRequest(
         String cardExpiry,
         String cardCvc,
         String merchantId
-) implements PaymentRequest{
+) implements PaymentRequest {
 }

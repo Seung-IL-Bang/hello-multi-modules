@@ -24,6 +24,14 @@ public class PaymentServiceImpl implements PaymentService {
         this.paymentResultEventService = paymentResultEventService;
     }
 
+    private static PaymentResult createDeclinedResult(String transactionId) {
+        return new PaymentResult.Builder()
+                .transactionId(transactionId)
+                .status(PaymentStatus.DECLINED)
+                .errorCode("INSUFFICIENT_INVENTORY")
+                .errorMessage("Insufficient inventory")
+                .build();
+    }
 
     @Override
     public PaymentResult processPayment(PaymentContext paymentContext, String productId, int quantity) {
@@ -52,14 +60,5 @@ public class PaymentServiceImpl implements PaymentService {
             paymentResultEventService.sendPaymentResultEvent(result);
             return result;
         }
-    }
-
-    private static PaymentResult createDeclinedResult(String transactionId) {
-        return new PaymentResult.Builder()
-                .transactionId(transactionId)
-                .status(PaymentStatus.DECLINED)
-                .errorCode("INSUFFICIENT_INVENTORY")
-                .errorMessage("Insufficient inventory")
-                .build();
     }
 }

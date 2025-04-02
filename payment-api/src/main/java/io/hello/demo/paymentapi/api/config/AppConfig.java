@@ -12,4 +12,9 @@ public class AppConfig {
         return new RestTemplate();
     }
 
+    @Bean
+    public PaymentContextFactory paymentContextFactory() {
+        return new PaymentContextFactory.DefaultPaymentContextFactory();
+    }
+
 }

@@ -1,6 +1,6 @@
 package io.hello.demo.paymentapi.support.response;
 
-public enum  ResultType {
+public enum ResultType {
 
     SUCCESS, ERROR
 }

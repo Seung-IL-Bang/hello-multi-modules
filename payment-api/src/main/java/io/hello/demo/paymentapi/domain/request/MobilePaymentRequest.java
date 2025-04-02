@@ -5,5 +5,5 @@ public record MobilePaymentRequest(
         String phoneNumber,
         String carrierCode,
         String authCode
-) implements PaymentRequest{
+) implements PaymentRequest {
 }
