@@ -13,6 +13,7 @@ import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardCvcValidator;
 import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardExpiryValidator;
 import io.hello.demo.paymentapi.domain.validator.v2.creditcard.CardNumberValidator;
 import io.hello.demo.paymentapi.domain.validator.v2.PaymentMethodValidator;
+import io.hello.demo.sseapi.SseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,6 +67,31 @@ class PaymentServiceTest {
 
         PaymentProcessorV2 paymentProcessor = new DefaultPaymentProcessorV4(paymentMethodFactory);
         paymentService = new PaymentServiceImpl(transactionIdGenerator, paymentProcessor, inventoryService);
+    }
+
+    @DisplayName("재고가 남아 있는 상품에 대해 결제 승인 처리될 경우, 유저에게 결제 승인 알림이 전송된다.")
+    @Test
+    void testPaymentProcess_withAvailableInventory_shouldSendApprovalNotification() {
+        // given
+        String productId = "product-1";
+        int quantity = 1;
+
+        PaymentContext paymentContext = new PaymentContext(
+                PaymentMethodType.CREDIT_CARD,
+                new CreditCardPaymentRequest(
+                        1000L,
+                        "1234-5678-9012-3456",
+                        "12/25",
+                        "123",
+                        "merchant-1"
+                )
+        );
+
+        // when
+        PaymentResult result = paymentService.processPayment(paymentContext, productId, quantity);
+
+        // then
+        assertThat(result.status()).isEqualTo(PaymentStatus.APPROVED);
     }
 
     @DisplayName("재고가 50개인 상품을 100번의 동시 결제 요청이 들어오면 정확히 50번만 성공하고 남은 재고는 0이어야 한다.")
@@ -137,7 +163,6 @@ class PaymentServiceTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 }
