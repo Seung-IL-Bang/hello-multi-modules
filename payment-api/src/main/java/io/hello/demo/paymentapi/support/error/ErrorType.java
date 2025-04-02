@@ -10,6 +10,12 @@ public enum ErrorType {
             "An unexpected error has occurred.",
             LogLevel.ERROR
     ),
+    INSUFFICIENT_INVENTORY(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            ErrorCode.E500,
+            "재고가 부족합니다.",
+            LogLevel.INFO
+    ),
     INVALID_PAYMENT_AMOUNT(
             HttpStatus.BAD_REQUEST,
             ErrorCode.E400,
@@ -31,6 +37,24 @@ public enum ErrorType {
             HttpStatus.BAD_REQUEST,
             ErrorCode.E400,
             "CVC는 3자리 숫자여야 합니다.",
+            LogLevel.WARN
+    ),
+    INVALID_PAYMENT_BANK_CODE(
+            HttpStatus.BAD_REQUEST,
+            ErrorCode.E400,
+            "은행 코드는 3자리여야 합니다.",
+            LogLevel.WARN
+    ),
+    INVALID_PAYMENT_VIRTUAL_ACCOUNT_NUMBER(
+            HttpStatus.BAD_REQUEST,
+            ErrorCode.E400,
+            "가상계좌 번호는 10자리여야 합니다.",
+            LogLevel.WARN
+    ),
+    INVALID_PAYMENT_VIRTUAL_ACCOUNT_HOLDER_NAME(
+            HttpStatus.BAD_REQUEST,
+            ErrorCode.E400,
+            "예금주명은 필수입니다.",
             LogLevel.WARN
     );
 

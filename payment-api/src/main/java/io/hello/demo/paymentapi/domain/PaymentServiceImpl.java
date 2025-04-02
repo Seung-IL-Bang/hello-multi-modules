@@ -3,6 +3,7 @@ package io.hello.demo.paymentapi.domain;
 import io.hello.demo.inventoryapi.InventoryService;
 import io.hello.demo.paymentapi.domain.generator.TransactionIdGenerator;
 import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
+import io.hello.demo.paymentapi.support.error.ErrorType;
 import org.springframework.stereotype.Service;
 
 
@@ -22,15 +23,6 @@ public class PaymentServiceImpl implements PaymentService {
         this.paymentProcessor = paymentProcessor;
         this.inventoryService = inventoryService;
         this.paymentResultEventService = paymentResultEventService;
-    }
-
-    private static PaymentResult createDeclinedResult(String transactionId) {
-        return new PaymentResult.Builder()
-                .transactionId(transactionId)
-                .status(PaymentStatus.DECLINED)
-                .errorCode("INSUFFICIENT_INVENTORY")
-                .errorMessage("Insufficient inventory")
-                .build();
     }
 
     @Override
@@ -60,5 +52,14 @@ public class PaymentServiceImpl implements PaymentService {
             paymentResultEventService.sendPaymentResultEvent(result);
             return result;
         }
+    }
+
+    private PaymentResult createDeclinedResult(String transactionId) {
+        return new PaymentResult.Builder()
+                .transactionId(transactionId)
+                .status(PaymentStatus.DECLINED)
+                .errorCode(ErrorType.INSUFFICIENT_INVENTORY.name())
+                .errorMessage(ErrorType.INSUFFICIENT_INVENTORY.getMessage())
+                .build();
     }
 }

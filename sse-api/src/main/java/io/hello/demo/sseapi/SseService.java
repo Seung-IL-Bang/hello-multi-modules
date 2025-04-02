@@ -13,18 +13,18 @@ public class SseService {
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
 
     // 사용자별 SSE 연결 생성
-    public SseEmitter createEmitter(String userId) {
+    public SseEmitter createEmitter(String transactionId) {
 
         SseEmitter emitter = new SseEmitter(30000L); // 60초 후 타임아웃
 
         // 연결 완료 이벤트
-        emitter.onCompletion(() -> removeEmitter(userId));
+        emitter.onCompletion(() -> removeEmitter(transactionId));
 
         // 타임아웃 이벤트
-        emitter.onTimeout(() -> removeEmitter(userId));
+        emitter.onTimeout(() -> removeEmitter(transactionId));
 
         // 에러 이벤트
-        emitter.onError(e -> removeEmitter(userId));
+        emitter.onError(e -> removeEmitter(transactionId));
 
         try {
             emitter.send(SseEmitter.event()
@@ -36,7 +36,7 @@ public class SseService {
         }
 
         // 사용자 ID로 emitter 저장
-        emitters.put(userId, emitter);
+        emitters.put(transactionId, emitter);
         return emitter;
     }
 
@@ -67,8 +67,8 @@ public class SseService {
         });
     }
 
-    private void removeEmitter(String userId) {
-        emitters.remove(userId);
+    private void removeEmitter(String transactionId) {
+        emitters.remove(transactionId);
     }
 
 

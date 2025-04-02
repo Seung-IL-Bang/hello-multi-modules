@@ -11,11 +11,11 @@ import io.hello.demo.paymentapi.domain.method.PaymentMethodType;
 import io.hello.demo.paymentapi.domain.processor.DefaultPaymentProcessor;
 import io.hello.demo.paymentapi.domain.processor.PaymentProcessor;
 import io.hello.demo.paymentapi.domain.request.CreditCardPaymentRequest;
-import io.hello.demo.paymentapi.domain.validator.PaymentMethodValidatorFactory;
-import io.hello.demo.paymentapi.domain.validator.creditcard.AmountValidator;
-import io.hello.demo.paymentapi.domain.validator.creditcard.CardCvcValidator;
-import io.hello.demo.paymentapi.domain.validator.creditcard.CardExpiryValidator;
-import io.hello.demo.paymentapi.domain.validator.creditcard.CardNumberValidator;
+import io.hello.demo.paymentapi.domain.method.validator.PaymentMethodValidatorFactory;
+import io.hello.demo.paymentapi.domain.method.validator.creditcard.CardAmountValidator;
+import io.hello.demo.paymentapi.domain.method.validator.creditcard.CardCvcValidator;
+import io.hello.demo.paymentapi.domain.method.validator.creditcard.CardExpiryValidator;
+import io.hello.demo.paymentapi.domain.method.validator.creditcard.CardNumberValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ class ConcurrentPaymentServiceTest {
                 new CardNumberValidator(),
                 new CardCvcValidator(),
                 new CardExpiryValidator(),
-                new AmountValidator()
+                new CardAmountValidator()
         ));
 
         List<PaymentMethod> paymentMethods = List.of(

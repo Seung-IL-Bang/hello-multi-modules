@@ -18,10 +18,10 @@ public class SseController {
     }
 
     // SSE 연결 엔드포인트
-    @GetMapping(value = "/connect/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter connect(@PathVariable("userId") String userId) {
-        log.info("SSE 연결 요청: {}", userId);
-        return sseService.createEmitter(userId);
+    @GetMapping(value = "/connect/{transactionId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter connect(@PathVariable("transactionId") String transactionId) {
+        log.info("SSE 연결 요청: {}", transactionId);
+        return sseService.createEmitter(transactionId);
     }
 
     // 결제 결과 알림 전송 (백엔드 시스템에서 호출)

@@ -18,7 +18,7 @@ public class PaymentResultEventService {
 
     @Async
     public void sendPaymentResultEvent(PaymentResult paymentResult) {
-        String url = "http://localhost:8080/api/v1/sse/send/payment-result";
+        String url = "http://localhost:9090/api/v1/sse/send/payment-result";
 
         if (paymentResult.status() == PaymentStatus.APPROVED) {
             PaymentResultEvent paymentResultEvent = new PaymentResultEvent(

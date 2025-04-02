@@ -1,4 +1,4 @@
-package io.hello.demo.paymentapi.domain.validator;
+package io.hello.demo.paymentapi.domain.method.validator;
 
 import io.hello.demo.paymentapi.domain.request.PaymentRequest;
 import org.springframework.stereotype.Component;

@@ -2,14 +2,12 @@ package io.hello.demo.paymentapi.domain.method;
 
 import io.hello.demo.paymentapi.domain.PaymentResult;
 import io.hello.demo.paymentapi.domain.PaymentStatus;
+import io.hello.demo.paymentapi.domain.method.validator.PaymentMethodValidatorFactory;
 import io.hello.demo.paymentapi.domain.request.PaymentRequest;
-import io.hello.demo.paymentapi.domain.validator.PaymentMethodValidator;
-import io.hello.demo.paymentapi.domain.validator.PaymentMethodValidatorFactory;
 import io.hello.demo.paymentapi.support.error.CoreException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Component
 public class CreditCardPaymentMethod implements PaymentMethod {
@@ -22,8 +20,9 @@ public class CreditCardPaymentMethod implements PaymentMethod {
 
     @Override
     public void validate(PaymentRequest request) {
-        List<PaymentMethodValidator> validators = validatorFactory.getPaymentMethodValidator(request);
-        validators.forEach(validator -> validator.validate(request));
+        validatorFactory
+                .getPaymentMethodValidator(request)
+                .forEach(validator -> validator.validate(request));
     }
 
     @Override

@@ -4,9 +4,9 @@ import io.hello.demo.paymentapi.domain.PaymentContext;
 import io.hello.demo.paymentapi.domain.PaymentResult;
 import io.hello.demo.paymentapi.domain.method.PaymentMethod;
 import io.hello.demo.paymentapi.domain.method.PaymentMethodFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class DefaultPaymentProcessor implements PaymentProcessor {
 
     private final PaymentMethodFactory paymentMethodFactory;
