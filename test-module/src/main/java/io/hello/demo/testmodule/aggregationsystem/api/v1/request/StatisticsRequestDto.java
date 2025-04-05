@@ -65,6 +65,27 @@ public class StatisticsRequestDto {
     }
 
     public StatisticsRequest toDomain() {
+
+        if (this.statisticType == null) {
+            throw new IllegalArgumentException("Statistic type is required");
+        }
+
+        if (this.period == null) {
+            throw new IllegalArgumentException("Period is required");
+        }
+
+        if (this.startDate == null) {
+            throw new IllegalArgumentException("Start date is required");
+        }
+
+        if (this.endDate == null) {
+            throw new IllegalArgumentException("End date is required");
+        }
+
+        if (this.startDate.isAfter(this.endDate)) {
+            throw new IllegalArgumentException("Start date must be before or equal to end date");
+        }
+
         StatisticsRequest request = new StatisticsRequest();
         request.setMerchantId(merchantId);
         request.setStatisticType(statisticType);

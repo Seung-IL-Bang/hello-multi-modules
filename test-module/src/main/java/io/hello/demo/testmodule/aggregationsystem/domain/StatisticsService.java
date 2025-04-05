@@ -26,9 +26,6 @@ public class StatisticsService {
     }
 
     public StatisticsResult getStatistics(StatisticsRequest request) {
-        // 요청 유효성 검증
-        validateRequest(request);
-
         // 캐시 키 생성
         String cacheKey = generateCacheKey(request);
 
@@ -54,28 +51,6 @@ public class StatisticsService {
         calculatorFactory.registerCalculator(calculator);
     }
 
-    private void validateRequest(StatisticsRequest request) {
-        if (request.getStatisticType() == null) {
-            throw new IllegalArgumentException("Statistic type is required");
-        }
-
-        if (request.getPeriod() == null) {
-            throw new IllegalArgumentException("Period is required");
-        }
-
-        if (request.getStartDate() == null) {
-            throw new IllegalArgumentException("Start date is required");
-        }
-
-        if (request.getEndDate() == null) {
-            throw new IllegalArgumentException("End date is required");
-        }
-
-        if (request.getStartDate().isAfter(request.getEndDate())) {
-            throw new IllegalArgumentException("Start date must be before or equal to end date");
-        }
-    }
-
     private List<Payment> fetchPayments(StatisticsRequest request) {
         LocalDateTime startDateTime = request.getStartDate().atStartOfDay();
         LocalDateTime endDateTime = request.getEndDate().plusDays(1).atStartOfDay();
@@ -90,8 +65,8 @@ public class StatisticsService {
 
     private String generateCacheKey(StatisticsRequest request) {
         StringBuilder sb = new StringBuilder();
-        sb.append(request.getStatisticType()).append("_")
-                .append(request.getPeriod()).append("_")
+        sb.append(request.getStatisticType().name()).append("_")
+                .append(request.getPeriod().name()).append("_")
                 .append(request.getStartDate()).append("_")
                 .append(request.getEndDate()).append("_");
 
@@ -149,6 +124,4 @@ public class StatisticsService {
             return createdAt;
         }
     }
-
-
 }
