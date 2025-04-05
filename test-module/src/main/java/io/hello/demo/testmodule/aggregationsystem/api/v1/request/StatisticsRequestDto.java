@@ -6,7 +6,7 @@ import io.hello.demo.testmodule.aggregationsystem.domain.StatisticsType;
 import java.time.LocalDate;
 import java.util.List;
 
-public class StatisticsRequest {
+public class StatisticsRequestDto {
     private String merchantId;
     private StatisticsType statisticType; // PAYMENT_AMOUNT, PAYMENT_COUNT, PAYMENT_METHOD_RATIO 등
     private Period period; // DAILY, WEEKLY, MONTHLY

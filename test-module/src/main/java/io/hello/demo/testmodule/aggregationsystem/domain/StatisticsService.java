@@ -1,7 +1,7 @@
 package io.hello.demo.testmodule.aggregationsystem.domain;
 
-import io.hello.demo.testmodule.aggregationsystem.api.v1.request.StatisticsRequest;
-import io.hello.demo.testmodule.aggregationsystem.api.v1.response.StatisticsResponse;
+import io.hello.demo.testmodule.aggregationsystem.api.v1.request.StatisticsRequestDto;
+import io.hello.demo.testmodule.aggregationsystem.api.v1.response.StatisticsResponseDto;
 import io.hello.demo.testmodule.aggregationsystem.storage.Payment;
 import io.hello.demo.testmodule.aggregationsystem.storage.PaymentRepository;
 
@@ -27,7 +27,7 @@ public class StatisticsService {
         this.calculatorFactory = calculatorFactory;
     }
 
-    public StatisticsResponse getStatistics(StatisticsRequest request) {
+    public StatisticsResponseDto getStatistics(StatisticsRequestDto request) {
         // 요청 유효성 검증
         validateRequest(request);
 
@@ -43,7 +43,7 @@ public class StatisticsService {
         // 캐시 미스 또는 만료된 경우 새로 계산
         List<Payment> payments = fetchPayments(request);
         StatisticsCalculator calculator = calculatorFactory.getCalculator(request.getStatisticType());
-        StatisticsResponse response = calculator.calculate(payments, request);
+        StatisticsResponseDto response = calculator.calculate(payments, request);
 
         // 결과 캐싱
         cacheStatistics(cacheKey, response);
@@ -56,7 +56,7 @@ public class StatisticsService {
         calculatorFactory.registerCalculator(calculator);
     }
 
-    private void validateRequest(StatisticsRequest request) {
+    private void validateRequest(StatisticsRequestDto request) {
         if (request.getStatisticType() == null) {
             throw new IllegalArgumentException("Statistic type is required");
         }
@@ -78,7 +78,7 @@ public class StatisticsService {
         }
     }
 
-    private List<Payment> fetchPayments(StatisticsRequest request) {
+    private List<Payment> fetchPayments(StatisticsRequestDto request) {
         LocalDateTime startDateTime = request.getStartDate().atStartOfDay();
         LocalDateTime endDateTime = request.getEndDate().plusDays(1).atStartOfDay();
 
@@ -90,7 +90,7 @@ public class StatisticsService {
         }
     }
 
-    private String generateCacheKey(StatisticsRequest request) {
+    private String generateCacheKey(StatisticsRequestDto request) {
         StringBuilder sb = new StringBuilder();
         sb.append(request.getStatisticType()).append("_")
                 .append(request.getPeriod()).append("_")
@@ -124,7 +124,7 @@ public class StatisticsService {
         return System.currentTimeMillis() - entry.getCreatedAt() > CACHE_EXPIRY_MILLIS;
     }
 
-    private void cacheStatistics(String cacheKey, StatisticsResponse response) {
+    private void cacheStatistics(String cacheKey, StatisticsResponseDto response) {
         cacheLock.writeLock().lock();
         try {
             statisticsCache.put(cacheKey, new CacheEntry(response, System.currentTimeMillis()));
@@ -135,15 +135,15 @@ public class StatisticsService {
 
     // 캐시 엔트리 클래스
     private static class CacheEntry {
-        private final StatisticsResponse response;
+        private final StatisticsResponseDto response;
         private final long createdAt;
 
-        public CacheEntry(StatisticsResponse response, long createdAt) {
+        public CacheEntry(StatisticsResponseDto response, long createdAt) {
             this.response = response;
             this.createdAt = createdAt;
         }
 
-        public StatisticsResponse getResponse() {
+        public StatisticsResponseDto getResponse() {
             return response;
         }
 

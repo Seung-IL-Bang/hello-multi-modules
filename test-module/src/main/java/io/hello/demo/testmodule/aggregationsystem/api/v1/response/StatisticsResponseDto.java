@@ -6,7 +6,7 @@ import io.hello.demo.testmodule.aggregationsystem.domain.StatisticsType;
 
 import java.util.List;
 
-public class StatisticsResponse {
+public class StatisticsResponseDto {
 
     private StatisticsType statisticType;
     private Period period;

@@ -2,8 +2,8 @@ package io.hello.demo.testmodule.aggregationsystem;
 
 import io.hello.demo.testmodule.aggregationsystem.api.v1.StatisticsController;
 import io.hello.demo.testmodule.aggregationsystem.api.v1.request.Period;
-import io.hello.demo.testmodule.aggregationsystem.api.v1.request.StatisticsRequest;
-import io.hello.demo.testmodule.aggregationsystem.api.v1.response.StatisticsResponse;
+import io.hello.demo.testmodule.aggregationsystem.api.v1.request.StatisticsRequestDto;
+import io.hello.demo.testmodule.aggregationsystem.api.v1.response.StatisticsResponseDto;
 import io.hello.demo.testmodule.aggregationsystem.domain.*;
 import io.hello.demo.testmodule.aggregationsystem.storage.*;
 
@@ -28,7 +28,7 @@ public class StatisticsApplication {
         StatisticsController controller = new StatisticsController(service);
 
         // 일별 결제 금액 통계 요청
-        StatisticsRequest amountRequest = new StatisticsRequest();
+        StatisticsRequestDto amountRequest = new StatisticsRequestDto();
         amountRequest.setMerchantId("MERCHANT-001");
         amountRequest.setStatisticType(StatisticsType.PAYMENT_AMOUNT);
         amountRequest.setPeriod(Period.DAILY);
@@ -37,11 +37,11 @@ public class StatisticsApplication {
         amountRequest.setGroupBy(Arrays.asList(StatisticsGroupType.PAYMENT_METHOD, StatisticsGroupType.PRODUCT_CATEGORY));
 
         System.out.println("\n=== 일별 결제 금액 통계 ===");
-        StatisticsResponse amountResponse = controller.getStatistics(amountRequest);
+        StatisticsResponseDto amountResponse = controller.getStatistics(amountRequest);
         printResponse(amountResponse);
 
         // 결제 수단별 비율 통계 요청
-        StatisticsRequest ratioRequest = new StatisticsRequest();
+        StatisticsRequestDto ratioRequest = new StatisticsRequestDto();
         ratioRequest.setMerchantId("MERCHANT-001");
         ratioRequest.setStatisticType(StatisticsType.PAYMENT_METHOD_RATIO);
         ratioRequest.setPeriod(Period.MONTHLY);
@@ -49,7 +49,7 @@ public class StatisticsApplication {
         ratioRequest.setEndDate(LocalDate.of(2023, 6, 30));
 
         System.out.println("\n=== 월별 결제 수단 비율 통계 ===");
-        StatisticsResponse ratioResponse = controller.getStatistics(ratioRequest);
+        StatisticsResponseDto ratioResponse = controller.getStatistics(ratioRequest);
         printResponse(ratioResponse);
     }
 
@@ -80,7 +80,7 @@ public class StatisticsApplication {
         System.out.println("Generated 1000 test payment records");
     }
 
-    private static void printResponse(StatisticsResponse response) {
+    private static void printResponse(StatisticsResponseDto response) {
         System.out.println("통계 유형: " + response.getStatisticType());
         System.out.println("기간 단위: " + response.getPeriod());
 

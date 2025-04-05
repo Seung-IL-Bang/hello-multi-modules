@@ -1,9 +1,8 @@
 package io.hello.demo.testmodule.aggregationsystem.domain;
 
-import io.hello.demo.testmodule.aggregationsystem.api.v1.request.StatisticsRequest;
-import io.hello.demo.testmodule.aggregationsystem.api.v1.response.StatisticsResponse;
+import io.hello.demo.testmodule.aggregationsystem.api.v1.request.StatisticsRequestDto;
+import io.hello.demo.testmodule.aggregationsystem.api.v1.response.StatisticsResponseDto;
 import io.hello.demo.testmodule.aggregationsystem.storage.Payment;
-import io.hello.demo.testmodule.aggregationsystem.storage.PaymentMethod;
 import io.hello.demo.testmodule.aggregationsystem.storage.PaymentStatus;
 import io.hello.demo.testmodule.aggregationsystem.support.DateUtil;
 
@@ -20,7 +19,7 @@ public class PaymentAmountCalculator implements StatisticsCalculator {
     }
 
     @Override
-    public StatisticsResponse calculate(List<Payment> payments, StatisticsRequest request) {
+    public StatisticsResponseDto calculate(List<Payment> payments, StatisticsRequestDto request) {
         // 결제 상태가 승인된 것만 필터링
         List<Payment> approvedPayments = payments.stream()
                 .filter(p -> PaymentStatus.APPROVED.equals(p.getStatus()))
@@ -35,7 +34,7 @@ public class PaymentAmountCalculator implements StatisticsCalculator {
         }
 
         // 응답 구성
-        StatisticsResponse response = new StatisticsResponse();
+        StatisticsResponseDto response = new StatisticsResponseDto();
         response.setStatisticType(getStatisticType());
         response.setPeriod(request.getPeriod());
 
