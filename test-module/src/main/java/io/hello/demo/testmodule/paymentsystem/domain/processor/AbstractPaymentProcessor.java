@@ -1,7 +1,7 @@
-package io.hello.demo.testmodule.domain.processor;
+package io.hello.demo.testmodule.paymentsystem.domain.processor;
 
-import io.hello.demo.testmodule.domain.PaymentRequest;
-import io.hello.demo.testmodule.domain.PaymentResult;
+import io.hello.demo.testmodule.paymentsystem.domain.PaymentRequest;
+import io.hello.demo.testmodule.paymentsystem.domain.PaymentResult;
 
 import java.math.BigDecimal;
 

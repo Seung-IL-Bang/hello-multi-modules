@@ -1,6 +1,6 @@
-package io.hello.demo.testmodule.api.response;
+package io.hello.demo.testmodule.paymentsystem.api.response;
 
-import io.hello.demo.testmodule.domain.PaymentResult;
+import io.hello.demo.testmodule.paymentsystem.domain.PaymentResult;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

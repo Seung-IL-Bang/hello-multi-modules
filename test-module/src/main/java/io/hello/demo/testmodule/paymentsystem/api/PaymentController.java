@@ -1,9 +1,9 @@
-package io.hello.demo.testmodule.api;
+package io.hello.demo.testmodule.paymentsystem.api;
 
-import io.hello.demo.testmodule.domain.PaymentResult;
-import io.hello.demo.testmodule.domain.PaymentService;
-import io.hello.demo.testmodule.api.request.PaymentRequestDto;
-import io.hello.demo.testmodule.api.response.PaymentResultDto;
+import io.hello.demo.testmodule.paymentsystem.domain.PaymentResult;
+import io.hello.demo.testmodule.paymentsystem.domain.PaymentService;
+import io.hello.demo.testmodule.paymentsystem.api.request.PaymentRequestDto;
+import io.hello.demo.testmodule.paymentsystem.api.response.PaymentResultDto;
 
 import java.math.BigDecimal;
 

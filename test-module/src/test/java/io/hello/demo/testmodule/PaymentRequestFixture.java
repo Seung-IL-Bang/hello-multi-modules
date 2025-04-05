@@ -1,9 +1,9 @@
 package io.hello.demo.testmodule;
 
-import io.hello.demo.testmodule.domain.AccountInfo;
-import io.hello.demo.testmodule.domain.CardInfo;
-import io.hello.demo.testmodule.domain.PaymentRequest;
-import io.hello.demo.testmodule.domain.TossPayInfo;
+import io.hello.demo.testmodule.paymentsystem.domain.AccountInfo;
+import io.hello.demo.testmodule.paymentsystem.domain.CardInfo;
+import io.hello.demo.testmodule.paymentsystem.domain.PaymentRequest;
+import io.hello.demo.testmodule.paymentsystem.domain.TossPayInfo;
 
 import java.math.BigDecimal;
 

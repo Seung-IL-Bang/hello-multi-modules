@@ -1,9 +1,11 @@
 package io.hello.demo.testmodule.domain;
 
 import io.hello.demo.testmodule.PaymentRequestFixture;
-import io.hello.demo.testmodule.domain.processor.AccountTransferPaymentProcessor;
-import io.hello.demo.testmodule.domain.processor.CardPaymentProcessor;
-import io.hello.demo.testmodule.domain.processor.TossPayPaymentProcessor;
+import io.hello.demo.testmodule.paymentsystem.domain.PaymentRequest;
+import io.hello.demo.testmodule.paymentsystem.domain.PaymentResult;
+import io.hello.demo.testmodule.paymentsystem.domain.processor.AccountTransferPaymentProcessor;
+import io.hello.demo.testmodule.paymentsystem.domain.processor.CardPaymentProcessor;
+import io.hello.demo.testmodule.paymentsystem.domain.processor.TossPayPaymentProcessor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

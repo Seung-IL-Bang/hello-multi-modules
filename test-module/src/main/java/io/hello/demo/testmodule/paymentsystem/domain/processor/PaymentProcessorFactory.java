@@ -1,4 +1,4 @@
-package io.hello.demo.testmodule.domain.processor;
+package io.hello.demo.testmodule.paymentsystem.domain.processor;
 
 public class PaymentProcessorFactory {
 

@@ -1,6 +1,9 @@
 package io.hello.demo.testmodule.domain;
 
 import io.hello.demo.testmodule.PaymentRequestFixture;
+import io.hello.demo.testmodule.paymentsystem.domain.PaymentRequest;
+import io.hello.demo.testmodule.paymentsystem.domain.PaymentResult;
+import io.hello.demo.testmodule.paymentsystem.domain.PaymentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
