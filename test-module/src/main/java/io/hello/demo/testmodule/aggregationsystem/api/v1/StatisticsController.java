@@ -1,5 +1,6 @@
 package io.hello.demo.testmodule.aggregationsystem.api.v1;
 
+import io.hello.demo.testmodule.aggregationsystem.domain.StatisticsResult;
 import io.hello.demo.testmodule.aggregationsystem.domain.StatisticsService;
 import io.hello.demo.testmodule.aggregationsystem.api.v1.request.StatisticsRequestDto;
 import io.hello.demo.testmodule.aggregationsystem.api.v1.response.StatisticsResponseDto;
@@ -13,6 +14,7 @@ public class StatisticsController {
     }
 
     public StatisticsResponseDto getStatistics(StatisticsRequestDto request) {
-        return statisticsService.getStatistics(request.toDomain());
+        StatisticsResult result = statisticsService.getStatistics(request.toDomain());
+        return StatisticsResponseDto.of(result);
     }
 }

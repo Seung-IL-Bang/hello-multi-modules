@@ -1,6 +1,5 @@
 package io.hello.demo.testmodule.aggregationsystem.domain;
 
-import io.hello.demo.testmodule.aggregationsystem.api.v1.response.StatisticsResponseDto;
 import io.hello.demo.testmodule.aggregationsystem.storage.Payment;
 import io.hello.demo.testmodule.aggregationsystem.storage.PaymentRepository;
 
@@ -26,7 +25,7 @@ public class StatisticsService {
         this.calculatorFactory = calculatorFactory;
     }
 
-    public StatisticsResponseDto getStatistics(StatisticsRequest request) {
+    public StatisticsResult getStatistics(StatisticsRequest request) {
         // 요청 유효성 검증
         validateRequest(request);
 
@@ -42,7 +41,7 @@ public class StatisticsService {
         // 캐시 미스 또는 만료된 경우 새로 계산
         List<Payment> payments = fetchPayments(request);
         StatisticsCalculator calculator = calculatorFactory.getCalculator(request.getStatisticType());
-        StatisticsResponseDto response = calculator.calculate(payments, request);
+        StatisticsResult response = calculator.calculate(payments, request);
 
         // 결과 캐싱
         cacheStatistics(cacheKey, response);
@@ -123,7 +122,7 @@ public class StatisticsService {
         return System.currentTimeMillis() - entry.getCreatedAt() > CACHE_EXPIRY_MILLIS;
     }
 
-    private void cacheStatistics(String cacheKey, StatisticsResponseDto response) {
+    private void cacheStatistics(String cacheKey, StatisticsResult response) {
         cacheLock.writeLock().lock();
         try {
             statisticsCache.put(cacheKey, new CacheEntry(response, System.currentTimeMillis()));
@@ -134,15 +133,15 @@ public class StatisticsService {
 
     // 캐시 엔트리 클래스
     private static class CacheEntry {
-        private final StatisticsResponseDto response;
+        private final StatisticsResult response;
         private final long createdAt;
 
-        public CacheEntry(StatisticsResponseDto response, long createdAt) {
+        public CacheEntry(StatisticsResult response, long createdAt) {
             this.response = response;
             this.createdAt = createdAt;
         }
 
-        public StatisticsResponseDto getResponse() {
+        public StatisticsResult getResponse() {
             return response;
         }
 

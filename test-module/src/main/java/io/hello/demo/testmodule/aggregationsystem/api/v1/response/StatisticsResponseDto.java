@@ -2,6 +2,7 @@ package io.hello.demo.testmodule.aggregationsystem.api.v1.response;
 
 import io.hello.demo.testmodule.aggregationsystem.domain.Period;
 import io.hello.demo.testmodule.aggregationsystem.domain.PeriodData;
+import io.hello.demo.testmodule.aggregationsystem.domain.StatisticsResult;
 import io.hello.demo.testmodule.aggregationsystem.domain.StatisticsType;
 
 import java.util.List;
@@ -34,5 +35,13 @@ public class StatisticsResponseDto {
 
     public void setData(List<PeriodData> data) {
         this.data = data;
+    }
+
+    public static StatisticsResponseDto of(StatisticsResult result) {
+        StatisticsResponseDto response = new StatisticsResponseDto();
+        response.setStatisticType(result.getStatisticType());
+        response.setPeriod(result.getPeriod());
+        response.setData(result.getData());
+        return response;
     }
 }
