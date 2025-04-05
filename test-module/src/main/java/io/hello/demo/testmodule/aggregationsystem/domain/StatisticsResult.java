@@ -1,12 +1,8 @@
-package io.hello.demo.testmodule.aggregationsystem.api.v1.response;
-
-import io.hello.demo.testmodule.aggregationsystem.domain.Period;
-import io.hello.demo.testmodule.aggregationsystem.domain.PeriodData;
-import io.hello.demo.testmodule.aggregationsystem.domain.StatisticsType;
+package io.hello.demo.testmodule.aggregationsystem.domain;
 
 import java.util.List;
 
-public class StatisticsResponseDto {
+public class StatisticsResult {
 
     private StatisticsType statisticType;
     private Period period;

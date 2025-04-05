@@ -1,6 +1,5 @@
 package io.hello.demo.testmodule.aggregationsystem.domain;
 
-import io.hello.demo.testmodule.aggregationsystem.api.v1.request.StatisticsRequestDto;
 import io.hello.demo.testmodule.aggregationsystem.api.v1.response.StatisticsResponseDto;
 import io.hello.demo.testmodule.aggregationsystem.storage.Payment;
 import io.hello.demo.testmodule.aggregationsystem.storage.PaymentRepository;
@@ -27,7 +26,7 @@ public class StatisticsService {
         this.calculatorFactory = calculatorFactory;
     }
 
-    public StatisticsResponseDto getStatistics(StatisticsRequestDto request) {
+    public StatisticsResponseDto getStatistics(StatisticsRequest request) {
         // 요청 유효성 검증
         validateRequest(request);
 
@@ -56,7 +55,7 @@ public class StatisticsService {
         calculatorFactory.registerCalculator(calculator);
     }
 
-    private void validateRequest(StatisticsRequestDto request) {
+    private void validateRequest(StatisticsRequest request) {
         if (request.getStatisticType() == null) {
             throw new IllegalArgumentException("Statistic type is required");
         }
@@ -78,7 +77,7 @@ public class StatisticsService {
         }
     }
 
-    private List<Payment> fetchPayments(StatisticsRequestDto request) {
+    private List<Payment> fetchPayments(StatisticsRequest request) {
         LocalDateTime startDateTime = request.getStartDate().atStartOfDay();
         LocalDateTime endDateTime = request.getEndDate().plusDays(1).atStartOfDay();
 
@@ -90,7 +89,7 @@ public class StatisticsService {
         }
     }
 
-    private String generateCacheKey(StatisticsRequestDto request) {
+    private String generateCacheKey(StatisticsRequest request) {
         StringBuilder sb = new StringBuilder();
         sb.append(request.getStatisticType()).append("_")
                 .append(request.getPeriod()).append("_")

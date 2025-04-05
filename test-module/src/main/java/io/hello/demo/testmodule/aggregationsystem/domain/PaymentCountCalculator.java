@@ -1,6 +1,5 @@
 package io.hello.demo.testmodule.aggregationsystem.domain;
 
-import io.hello.demo.testmodule.aggregationsystem.api.v1.request.StatisticsRequestDto;
 import io.hello.demo.testmodule.aggregationsystem.api.v1.response.StatisticsResponseDto;
 import io.hello.demo.testmodule.aggregationsystem.storage.Payment;
 import io.hello.demo.testmodule.aggregationsystem.storage.PaymentStatus;
@@ -18,7 +17,7 @@ public class PaymentCountCalculator implements StatisticsCalculator {
     }
 
     @Override
-    public StatisticsResponseDto calculate(List<Payment> payments, StatisticsRequestDto request) {
+    public StatisticsResponseDto calculate(List<Payment> payments, StatisticsRequest request) {
         // 결제 상태가 승인된 것만 필터링
         List<Payment> approvedPayments = payments.stream()
                 .filter(p -> PaymentStatus.APPROVED.equals(p.getStatus()))

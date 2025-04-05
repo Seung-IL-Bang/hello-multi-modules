@@ -1,7 +1,7 @@
 package io.hello.demo.testmodule.aggregationsystem;
 
 import io.hello.demo.testmodule.aggregationsystem.api.v1.StatisticsController;
-import io.hello.demo.testmodule.aggregationsystem.api.v1.request.Period;
+import io.hello.demo.testmodule.aggregationsystem.domain.Period;
 import io.hello.demo.testmodule.aggregationsystem.api.v1.request.StatisticsRequestDto;
 import io.hello.demo.testmodule.aggregationsystem.api.v1.response.StatisticsResponseDto;
 import io.hello.demo.testmodule.aggregationsystem.domain.*;

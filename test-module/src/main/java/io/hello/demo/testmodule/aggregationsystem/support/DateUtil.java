@@ -1,6 +1,6 @@
 package io.hello.demo.testmodule.aggregationsystem.support;
 
-import io.hello.demo.testmodule.aggregationsystem.api.v1.request.Period;
+import io.hello.demo.testmodule.aggregationsystem.domain.Period;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

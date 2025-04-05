@@ -13,6 +13,6 @@ public class StatisticsController {
     }
 
     public StatisticsResponseDto getStatistics(StatisticsRequestDto request) {
-        return statisticsService.getStatistics(request);
+        return statisticsService.getStatistics(request.toDomain());
     }
 }

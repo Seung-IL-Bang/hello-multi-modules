@@ -1,14 +1,9 @@
-package io.hello.demo.testmodule.aggregationsystem.api.v1.request;
-
-import io.hello.demo.testmodule.aggregationsystem.domain.Period;
-import io.hello.demo.testmodule.aggregationsystem.domain.StatisticsGroupType;
-import io.hello.demo.testmodule.aggregationsystem.domain.StatisticsRequest;
-import io.hello.demo.testmodule.aggregationsystem.domain.StatisticsType;
+package io.hello.demo.testmodule.aggregationsystem.domain;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public class StatisticsRequestDto {
+public class StatisticsRequest {
     private String merchantId;
     private StatisticsType statisticType; // PAYMENT_AMOUNT, PAYMENT_COUNT, PAYMENT_METHOD_RATIO 등
     private Period period; // DAILY, WEEKLY, MONTHLY
@@ -62,16 +57,5 @@ public class StatisticsRequestDto {
 
     public void setGroupBy(List<StatisticsGroupType> groupBy) {
         this.groupBy = groupBy;
-    }
-
-    public StatisticsRequest toDomain() {
-        StatisticsRequest request = new StatisticsRequest();
-        request.setMerchantId(merchantId);
-        request.setStatisticType(statisticType);
-        request.setPeriod(period);
-        request.setStartDate(startDate);
-        request.setEndDate(endDate);
-        request.setGroupBy(groupBy);
-        return request;
     }
 }
