@@ -1,6 +1,6 @@
-package io.hello.demo.testmodule.unittest;
+package io.hello.demo.testmodule.unittest.paymentsystem;
 
-import io.hello.demo.testmodule.unittest.PaymentRequest.CardInfo;
+import io.hello.demo.testmodule.unittest.paymentsystem.PaymentRequest.CardInfo;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

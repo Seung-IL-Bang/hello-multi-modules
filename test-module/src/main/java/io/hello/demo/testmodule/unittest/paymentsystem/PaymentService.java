@@ -1,4 +1,4 @@
-package io.hello.demo.testmodule.unittest;
+package io.hello.demo.testmodule.unittest.paymentsystem;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;

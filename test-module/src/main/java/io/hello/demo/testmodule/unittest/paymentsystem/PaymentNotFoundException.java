@@ -1,4 +1,4 @@
-package io.hello.demo.testmodule.unittest;
+package io.hello.demo.testmodule.unittest.paymentsystem;
 
 public class PaymentNotFoundException extends RuntimeException {
     public PaymentNotFoundException(String message) {

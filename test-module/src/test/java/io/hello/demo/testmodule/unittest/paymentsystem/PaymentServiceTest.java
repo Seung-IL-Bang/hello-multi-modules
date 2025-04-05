@@ -1,4 +1,4 @@
-package io.hello.demo.testmodule.unittest;
+package io.hello.demo.testmodule.unittest.paymentsystem;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static io.hello.demo.testmodule.unittest.PaymentRequest.*;
+import static io.hello.demo.testmodule.unittest.paymentsystem.PaymentRequest.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
