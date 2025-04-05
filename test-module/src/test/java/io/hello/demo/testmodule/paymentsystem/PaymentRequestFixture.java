@@ -1,4 +1,4 @@
-package io.hello.demo.testmodule;
+package io.hello.demo.testmodule.paymentsystem;
 
 import io.hello.demo.testmodule.paymentsystem.domain.AccountInfo;
 import io.hello.demo.testmodule.paymentsystem.domain.CardInfo;

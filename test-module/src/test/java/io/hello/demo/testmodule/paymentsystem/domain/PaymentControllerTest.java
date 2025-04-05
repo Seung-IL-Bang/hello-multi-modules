@@ -1,4 +1,4 @@
-package io.hello.demo.testmodule.domain;
+package io.hello.demo.testmodule.paymentsystem.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
 

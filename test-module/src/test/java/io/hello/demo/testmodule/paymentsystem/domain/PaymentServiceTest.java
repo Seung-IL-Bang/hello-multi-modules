@@ -1,11 +1,6 @@
-package io.hello.demo.testmodule.domain;
+package io.hello.demo.testmodule.paymentsystem.domain;
 
-import io.hello.demo.testmodule.PaymentRequestFixture;
-import io.hello.demo.testmodule.paymentsystem.domain.PaymentRequest;
-import io.hello.demo.testmodule.paymentsystem.domain.PaymentResult;
-import io.hello.demo.testmodule.paymentsystem.domain.processor.AccountTransferPaymentProcessor;
-import io.hello.demo.testmodule.paymentsystem.domain.processor.CardPaymentProcessor;
-import io.hello.demo.testmodule.paymentsystem.domain.processor.TossPayPaymentProcessor;
+import io.hello.demo.testmodule.paymentsystem.PaymentRequestFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,40 +8,40 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PaymentProcessorTest {
+class PaymentServiceTest {
 
-    @DisplayName("카드 처리기 결제 테스트")
+    @DisplayName("카드 결제 서비스 테스트")
     @Test
-    void testProcessPaymentWithCard() {
+    void testPaymentService() {
         // Arrange
-        CardPaymentProcessor processor = new CardPaymentProcessor();
-        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest();
+        PaymentService paymentService = new PaymentService();
+        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest("CARD");
 
         // Act
-        PaymentResult paymentResult = processor.processPayment(paymentRequest);
+        PaymentResult paymentResult = paymentService.processPayment(paymentRequest);
 
         // Assert
         assertThat(paymentResult).isNotNull();
         assertThat(paymentResult.getPaymentId()).isNotNull();
         assertThat(paymentResult.getPaymentId()).contains("Payment:");
         assertThat(paymentResult.getStatus()).isEqualTo("APPROVED");
-        assertThat(paymentResult.getApprovedAmount()).isEqualTo(new BigDecimal("100.00"));
+        assertThat(paymentResult.getApprovedAmount()).isEqualTo(paymentRequest.getAmount());
         assertThat(paymentResult.getApprovedAt()).isNotNull();
         assertThat(paymentResult.getPaymentMethodType()).isEqualTo("CARD");
         assertThat(paymentResult.getReceiptUrl()).isNotNull();
         assertThat(paymentResult.getReceiptUrl()).contains("https://toss.im/receipt/");
     }
 
-    @DisplayName("카드 처리기 결제 취소 테스트")
+    @DisplayName("카드 결제 서비스 취소 테스트")
     @Test
-    void testCancelPaymentWithCard() {
+    void testCancelPaymentService() {
         // Arrange
-        CardPaymentProcessor processor = new CardPaymentProcessor();
-        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest();
-        PaymentResult paymentResult = processor.processPayment(paymentRequest);
+        PaymentService paymentService = new PaymentService();
+        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest("CARD");
+        PaymentResult paymentResult = paymentService.processPayment(paymentRequest);
 
         // Act
-        PaymentResult cancelResult = processor.cancelPayment(paymentResult.getPaymentId(), paymentResult.getApprovedAmount());
+        PaymentResult cancelResult = paymentService.cancelPayment(paymentResult.getPaymentId(), "CARD", paymentResult.getApprovedAmount());
 
         // Assert
         assertThat(cancelResult).isNotNull();
@@ -61,38 +56,38 @@ class PaymentProcessorTest {
         assertThat(cancelResult.getReceiptUrl()).contains("https://toss.im/receipt/");
     }
 
-    @DisplayName("계좌이체 처리기 결제 테스트")
+    @DisplayName("계좌이체 결제 서비스 테스트")
     @Test
-    void testProcessPaymentWithAccountTransfer() {
+    void testAccountTransferPaymentService() {
         // Arrange
-        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest();
-        AccountTransferPaymentProcessor processor = new AccountTransferPaymentProcessor();
+        PaymentService paymentService = new PaymentService();
+        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest("ACCOUNT_TRANSFER");
 
         // Act
-        PaymentResult paymentResult = processor.processPayment(paymentRequest);
+        PaymentResult paymentResult = paymentService.processPayment(paymentRequest);
 
         // Assert
         assertThat(paymentResult).isNotNull();
         assertThat(paymentResult.getPaymentId()).isNotNull();
         assertThat(paymentResult.getPaymentId()).contains("Payment:");
         assertThat(paymentResult.getStatus()).isEqualTo("APPROVED");
-        assertThat(paymentResult.getApprovedAmount()).isEqualTo(new BigDecimal("100.00"));
+        assertThat(paymentResult.getApprovedAmount()).isEqualTo(paymentRequest.getAmount());
         assertThat(paymentResult.getApprovedAt()).isNotNull();
         assertThat(paymentResult.getPaymentMethodType()).isEqualTo("ACCOUNT_TRANSFER");
         assertThat(paymentResult.getReceiptUrl()).isNotNull();
         assertThat(paymentResult.getReceiptUrl()).contains("https://toss.im/receipt/");
     }
 
-    @DisplayName("계좌이체 처리기 결제 취소 테스트")
+    @DisplayName("계좌이체 결제 서비스 취소 테스트")
     @Test
-    void testCancelPaymentWithAccountTransfer() {
+    void testCancelAccountTransferPaymentService() {
         // Arrange
-        AccountTransferPaymentProcessor processor = new AccountTransferPaymentProcessor();
-        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest();
-        PaymentResult paymentResult = processor.processPayment(paymentRequest);
+        PaymentService paymentService = new PaymentService();
+        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest("ACCOUNT_TRANSFER");
+        PaymentResult paymentResult = paymentService.processPayment(paymentRequest);
 
         // Act
-        PaymentResult cancelResult = processor.cancelPayment(paymentResult.getPaymentId(), paymentResult.getApprovedAmount());
+        PaymentResult cancelResult = paymentService.cancelPayment(paymentResult.getPaymentId(), "ACCOUNT_TRANSFER", paymentResult.getApprovedAmount());
 
         // Assert
         assertThat(cancelResult).isNotNull();
@@ -107,39 +102,38 @@ class PaymentProcessorTest {
         assertThat(cancelResult.getReceiptUrl()).contains("https://toss.im/receipt/");
     }
 
-
-    @DisplayName("토스페이 결제기 결제 테스트")
+    @DisplayName("토스페이 결제 서비스 테스트")
     @Test
-    void testProcessPaymentWithTossPay() {
+    void testTossPayPaymentService() {
         // Arrange
-        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest();
-        TossPayPaymentProcessor processor = new TossPayPaymentProcessor();
+        PaymentService paymentService = new PaymentService();
+        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest("TOSS_PAY");
 
         // Act
-        PaymentResult paymentResult = processor.processPayment(paymentRequest);
+        PaymentResult paymentResult = paymentService.processPayment(paymentRequest);
 
         // Assert
         assertThat(paymentResult).isNotNull();
         assertThat(paymentResult.getPaymentId()).isNotNull();
         assertThat(paymentResult.getPaymentId()).contains("Payment:");
         assertThat(paymentResult.getStatus()).isEqualTo("APPROVED");
-        assertThat(paymentResult.getApprovedAmount()).isEqualTo(new BigDecimal("100.00"));
+        assertThat(paymentResult.getApprovedAmount()).isEqualTo(paymentRequest.getAmount());
         assertThat(paymentResult.getApprovedAt()).isNotNull();
         assertThat(paymentResult.getPaymentMethodType()).isEqualTo("TOSS_PAY");
         assertThat(paymentResult.getReceiptUrl()).isNotNull();
         assertThat(paymentResult.getReceiptUrl()).contains("https://toss.im/receipt/");
     }
 
-    @DisplayName("토스페이 결제기 결제 취소 테스트")
+    @DisplayName("토스페이 결제 서비스 취소 테스트")
     @Test
-    void testCancelPaymentWithTossPay() {
+    void testCancelTossPayPaymentService() {
         // Arrange
-        TossPayPaymentProcessor processor = new TossPayPaymentProcessor();
-        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest();
-        PaymentResult paymentResult = processor.processPayment(paymentRequest);
+        PaymentService paymentService = new PaymentService();
+        PaymentRequest paymentRequest = PaymentRequestFixture.createPaymentRequest("TOSS_PAY");
+        PaymentResult paymentResult = paymentService.processPayment(paymentRequest);
 
         // Act
-        PaymentResult cancelResult = processor.cancelPayment(paymentResult.getPaymentId(), paymentResult.getApprovedAmount());
+        PaymentResult cancelResult = paymentService.cancelPayment(paymentResult.getPaymentId(), "TOSS_PAY", paymentResult.getApprovedAmount());
 
         // Assert
         assertThat(cancelResult).isNotNull();

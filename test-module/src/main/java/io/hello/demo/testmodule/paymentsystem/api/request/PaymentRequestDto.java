@@ -1,6 +1,5 @@
 package io.hello.demo.testmodule.paymentsystem.api.request;
 
-import io.hello.demo.testmodule.domain.*;
 import io.hello.demo.testmodule.paymentsystem.domain.*;
 
 import java.math.BigDecimal;
