@@ -22,7 +22,7 @@ public class ExternalController {
             name = "delay",
             required = false,
             defaultValue = "0") long delay) {
-        ThreadUtils.sleep(delay); // Simulate a delay of 1 second
+        ThreadUtils.sleep(delay); // Simulate a delay
         return ApiResponse.success();
     }
 
@@ -36,7 +36,7 @@ public class ExternalController {
             name = "delay",
             required = false,
             defaultValue = "0") long delay) {
-        ThreadUtils.sleep(delay); // Simulate a delay of 1 second
+        ThreadUtils.sleep(delay); // Simulate a delay
         return ApiResponse.error(ErrorType.DEFAULT_ERROR);
     }
 }
