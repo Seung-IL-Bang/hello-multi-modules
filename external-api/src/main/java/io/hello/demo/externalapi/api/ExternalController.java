@@ -1,5 +1,6 @@
 package io.hello.demo.externalapi.api;
 
+import io.hello.demo.externalapi.support.error.CoreException;
 import io.hello.demo.externalapi.support.error.ErrorType;
 import io.hello.demo.externalapi.support.response.ApiResponse;
 import io.hello.demo.utilsmodule.ThreadUtils;
@@ -27,16 +28,30 @@ public class ExternalController {
     }
 
     /**
-     * Simulate an external API call with a delay and an error
+     * Simulate an external API call with a delay and an error response
      * @param delay
      * @return
      */
     @GetMapping("/api/v1/error")
-    public ApiResponse<?> getDelayApiWithThrowable(@RequestParam(
+    public ApiResponse<?> getDelayApiWithErrorResponse(@RequestParam(
             name = "delay",
             required = false,
             defaultValue = "0") long delay) {
         ThreadUtils.sleep(delay); // Simulate a delay
         return ApiResponse.error(ErrorType.DEFAULT_ERROR);
+    }
+
+    /**
+     * Simulate an external API call with a delay and Throw an exception
+     * @param delay
+     * @return
+     */
+    @GetMapping("/api/v1/exception")
+    public ApiResponse<?> getDelayApiWithException(@RequestParam(
+            name = "delay",
+            required = false,
+            defaultValue = "0") long delay) {
+        ThreadUtils.sleep(delay); // Simulate a delay
+        throw new CoreException(ErrorType.DEFAULT_ERROR);
     }
 }
