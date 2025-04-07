@@ -8,4 +8,6 @@ tasks.named('jar') {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation project(':utils-module')
 }
