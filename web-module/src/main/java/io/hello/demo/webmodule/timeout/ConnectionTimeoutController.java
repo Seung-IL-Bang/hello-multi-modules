@@ -1,4 +1,4 @@
-package io.hello.demo.webmodule;
+package io.hello.demo.webmodule.timeout;
 
 import io.hello.demo.webmodule.support.error.ErrorCode;
 import io.hello.demo.webmodule.support.error.ErrorMessage;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;

@@ -1,4 +1,4 @@
-package io.hello.demo.webmodule;
+package io.hello.demo.webmodule.timeout;
 
 import io.hello.demo.webmodule.support.error.ErrorCode;
 import io.hello.demo.webmodule.support.error.ErrorMessage;
