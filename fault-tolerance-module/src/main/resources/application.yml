@@ -20,9 +20,9 @@ server:
 #        automatic-transition-from-open-to-half-open-enabled: true
 #        event-consumer-buffer-size: 100
 #        record-exceptions:
-#          - io.hello.demo.faulttolerancemodule.RecordException
+#          - io.hello.demo.faulttolerancemodule.circuitbreaker.RecordException
 #        ignore-exceptions:
-#          - io.hello.demo.faulttolerancemodule.IgnoreException
+#          - io.hello.demo.faulttolerancemodule.circuitbreaker.IgnoreException
 #    instances:
 #      simpleCircuitBreakerConfig:
 #        baseConfig: default

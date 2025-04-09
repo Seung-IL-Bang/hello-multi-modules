@@ -1,4 +1,4 @@
-package io.hello.demo.faulttolerancemodule;
+package io.hello.demo.faulttolerancemodule.circuitbreaker;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
