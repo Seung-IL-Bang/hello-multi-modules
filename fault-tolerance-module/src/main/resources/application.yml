@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: fault-tolerance-module
+
+server:
+  port: 9111
+
+#resilience4j:
+#  circuitbreaker:
+#    configs:
+#      default:
+#        sliding-window-type: COUNT_BASED
+#        minimum-number-of-calls: 5
+#        sliding-window-size: 10
+#        wait-duration-in-open-state: 10s
+#        failure-rate-threshold: 50
+#        slow-call-duration-threshold: 3000
+#        slow-call-rate-threshold: 50
+#        permitted-number-of-calls-in-half-open-state: 5
+#        automatic-transition-from-open-to-half-open-enabled: true
+#        event-consumer-buffer-size: 100
+#        record-exceptions:
+#          - io.hello.demo.faulttolerancemodule.RecordException
+#        ignore-exceptions:
+#          - io.hello.demo.faulttolerancemodule.IgnoreException
+#    instances:
+#      simpleCircuitBreakerConfig:
+#        baseConfig: default
+
+logging:
+  level:
+    root: INFO

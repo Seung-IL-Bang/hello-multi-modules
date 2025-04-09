@@ -1,0 +1,26 @@
+tasks.named('bootJar') {
+    enabled = true
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+ext {
+    resilience4jVersion = '2.2.0'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation 'org.springframework.boot:spring-boot-starter-aop:3.4.4'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:3.4.4'
+
+    implementation "io.github.resilience4j:resilience4j-all:${resilience4jVersion}"
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.2.1'
+
+
+//    implementation "io.github.resilience4j:resilience4j-circuitbreaker:${resilience4jVersion}"
+//    implementation "io.github.resilience4j:resilience4j-ratelimiter:${resilience4jVersion}"
+//    implementation "io.github.resilience4j:resilience4j-retry:${resilience4jVersion}"
+}
