@@ -5,7 +5,6 @@ spring:
 server:
   tomcat:
     threads:
-      max: 10
+      max: 100
       min-spare: 10
-    accept-count: 0
-    max-connections: 8192
+  port: 8081
