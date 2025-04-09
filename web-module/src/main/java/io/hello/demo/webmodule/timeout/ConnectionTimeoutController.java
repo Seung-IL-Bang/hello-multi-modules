@@ -4,6 +4,8 @@ import io.hello.demo.webmodule.support.error.ErrorCode;
 import io.hello.demo.webmodule.support.error.ErrorMessage;
 import io.hello.demo.webmodule.support.error.ErrorType;
 import io.hello.demo.webmodule.support.response.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -22,6 +24,8 @@ import static io.hello.demo.webmodule.support.error.ErrorType.UNKNOWN_ERROR;
 @RestController
 @RequestMapping("/web-module")
 public class ConnectionTimeoutController {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     /**
      * Connection Timeout Test
@@ -49,6 +53,7 @@ public class ConnectionTimeoutController {
             );
             return response.getBody();
         } catch (ResourceAccessException e) {
+            log.error("[Error][ConnectionTimeoutController][connectionTimeout] : {}", e.getMessage(), e);
             if (e.getCause() instanceof ConnectException) { // java.net.ConnectException 이 ResourceAccessException 에 포함되어 발생
                 return ApiResponse.error(ErrorType.CONNECTION_TIMEOUT);
             }
@@ -57,6 +62,7 @@ public class ConnectionTimeoutController {
             }
             return ApiResponse.error(NETWORK_ERROR);
         } catch (Exception e) {
+            log.error("[Error][ConnectionTimeoutController][connectionTimeout] : {}", e.getMessage(), e);
             return ApiResponse.error(UNKNOWN_ERROR);
         }
     }

@@ -3,6 +3,8 @@ package io.hello.demo.webmodule.timeout;
 import io.hello.demo.webmodule.support.error.ErrorCode;
 import io.hello.demo.webmodule.support.error.ErrorMessage;
 import io.hello.demo.webmodule.support.response.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -21,6 +23,8 @@ import static io.hello.demo.webmodule.support.error.ErrorType.UNKNOWN_ERROR;
 @RestController
 @RequestMapping("/web-module")
 public class ReadTimeoutController {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     /**
      * RestTemplate 은 Spring Framework 5.0 이상부터 Deprecated 되었으며, WebClient 를 사용하도록 권장됨
@@ -50,11 +54,13 @@ public class ReadTimeoutController {
             );
             return response.getBody();
         } catch (ResourceAccessException e) {
+            log.error("[Error][ReadTimeoutController][readTimeout] : {}", e.getMessage(), e);
             if (e.getCause() instanceof SocketTimeoutException ste) { // readTimeout 발생
                 return ApiResponse.error(new ErrorMessage(ErrorCode.E500.name(), ste.getMessage()));
             }
             return ApiResponse.error(NETWORK_ERROR);
         } catch (Exception e) {
+            log.error("[Error][ReadTimeoutController][readTimeout] : {}", e.getMessage(), e);
             return ApiResponse.error(UNKNOWN_ERROR);
         }
     }
