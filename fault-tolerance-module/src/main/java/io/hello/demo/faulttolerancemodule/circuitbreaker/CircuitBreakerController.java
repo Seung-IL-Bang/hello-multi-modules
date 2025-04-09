@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/resilience4j")
+@RequestMapping("/resilience4j/circuit-breaker")
 public class CircuitBreakerController {
 
     private final CircuitBreakerService circuitBreakerService;
