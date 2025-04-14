@@ -13,12 +13,7 @@ public class EventStore {
         }
     }
 
-    public MoneyWithdrawnEvent get(String eventId) {
-        return eventStore.get(eventId);
-    }
-
     public boolean exists(String eventId) {
         return eventStore.containsKey(eventId);
     }
-
 }
