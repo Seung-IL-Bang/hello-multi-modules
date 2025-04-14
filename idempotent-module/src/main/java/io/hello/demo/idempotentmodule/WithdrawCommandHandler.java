@@ -16,16 +16,16 @@ public class WithdrawCommandHandler {
     }
 
     public void handle(WithdrawMoneyCommand command) {
-        if (eventStore.exists(command.commandId())) {
-            log.warn("Command already processed: {}", command.commandId());
-            return;
-        }
-
         MoneyWithdrawnEvent event = new MoneyWithdrawnEvent(
                 command.commandId(), command.accountId(), command.amount()
         );
 
+        if (eventStore.exists(event.eventId())) {
+            log.warn("Event already processed: {}", command.commandId());
+            throw new IllegalStateException("Event already processed");
+        }
         eventStore.append(event);
+
         accountAggregate.apply(event);
     }
 }
