@@ -23,7 +23,9 @@ public class RetryService {
 
     @PostConstruct
     public void registerEventListener() {
-        this.retryRegistry.getEventPublisher().onEvent(event -> log.info("Retry event: " + event.getEventType()));
+        this.retryRegistry.retry(SIMPLE_RETRY_CONFIG)
+                .getEventPublisher()
+                .onRetry(event -> log.info("Retry attempt: {}",event.getNumberOfRetryAttempts()));
     }
 
     public String processWithoutResilience4j(String param) {
@@ -33,7 +35,7 @@ public class RetryService {
 
         while (retryCount++ < MAX_ATTEMPS) {
             try {
-                log.info("callAnotherServer() attempt: " + retryCount);
+                log.info("callAnotherServer() attempt: {}", retryCount);
                 result = callAnotherServer(param);
                 break; // 성공하면 break
             } catch (RetryException e) {
@@ -64,7 +66,7 @@ public class RetryService {
 
     private String fallback(String param, Exception ex) {
         // retry에 전부 실패해야 fallback이 실행
-        log.info("fallback! your request is " + param);
+        log.info("fallback! your request is {}", param);
         return "Recovered: " + ex.toString();
     }
 
