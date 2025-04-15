@@ -1,0 +1,24 @@
+tasks.named('bootJar') {
+    enabled = true
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+ext {
+    springCloudVersion = '2024.0.0'
+}
+
+dependencyManagement {
+    imports {
+        // spring-cloud-starter-openfeign를 사용할 때는 Spring Cloud BOM(Bill of Materials)을 함께 설정해야 버전 충돌 없이 Feign 관련 의존성들이 로딩됩니다.
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+}
