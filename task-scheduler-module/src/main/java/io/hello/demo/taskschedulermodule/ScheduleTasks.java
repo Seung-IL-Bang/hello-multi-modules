@@ -31,17 +31,17 @@ public class ScheduleTasks {
         ThreadUtils.sleep(5000);
     }
 
-    @Scheduled(fixedRate = 500, scheduler = "customTaskScheduler")
-    public void scheduleFixedRateTask3() {
-        log.info("Task started in : {}", Thread.currentThread().getName());
-        threadPoolStatusChecker.printThreadPoolStatus();
-        ThreadUtils.sleep(5000);
-    }
-
-    @Scheduled(fixedRate = 500, scheduler = "customTaskScheduler")
-    public void scheduleFixedRateTask4() {
-        log.info("Task started in : {}", Thread.currentThread().getName());
-        threadPoolStatusChecker.printThreadPoolStatus();
-        ThreadUtils.sleep(5000);
-    }
+//    @Scheduled(fixedRate = 500, scheduler = "customTaskScheduler")
+//    public void scheduleFixedRateTask3() {
+//        log.info("Task started in : {}", Thread.currentThread().getName());
+//        threadPoolStatusChecker.printThreadPoolStatus();
+//        ThreadUtils.sleep(5000);
+//    }
+//
+//    @Scheduled(fixedRate = 500, scheduler = "customTaskScheduler")
+//    public void scheduleFixedRateTask4() {
+//        log.info("Task started in : {}", Thread.currentThread().getName());
+//        threadPoolStatusChecker.printThreadPoolStatus();
+//        ThreadUtils.sleep(5000);
+//    }
 }
