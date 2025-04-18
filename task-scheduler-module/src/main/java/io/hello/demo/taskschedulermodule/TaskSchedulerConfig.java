@@ -13,11 +13,18 @@ public class TaskSchedulerConfig {
     @Bean
     public TaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(3);
-        scheduler.setThreadNamePrefix("my-scheduler-");
+        scheduler.setPoolSize(1);
+        scheduler.setThreadNamePrefix("default-task-scheduler");
         scheduler.initialize();
         return scheduler;
     }
 
-
+    @Bean
+    public TaskScheduler customTaskScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(3);
+        scheduler.setThreadNamePrefix("custom-task-scheduler");
+        scheduler.initialize();
+        return scheduler;
+    }
 }
