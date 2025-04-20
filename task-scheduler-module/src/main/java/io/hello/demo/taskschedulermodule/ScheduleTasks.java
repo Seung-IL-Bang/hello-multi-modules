@@ -17,19 +17,28 @@ public class ScheduleTasks {
         this.threadPoolStatusChecker = threadPoolStatusChecker;
     }
 
-    @Scheduled(fixedRate = 500)
-    public void scheduleFixedRateTask1() {
+    @Scheduled(fixedRate = 2000)
+    public void scheduledLog() {
         log.info("Task started in : {}", Thread.currentThread().getName());
         threadPoolStatusChecker.printThreadPoolStatus();
-        ThreadUtils.sleep(5000);
+        if (Math.random() > 0.5) {
+            throw new RuntimeException("Random exception occurred"); // 예외가 발생해도 다음 스케줄링은 계속 진행됨
+        }
     }
 
-    @Scheduled(fixedRate = 500)
-    public void scheduleFixedRateTask2() {
-        log.info("Task started in : {}", Thread.currentThread().getName());
-        threadPoolStatusChecker.printThreadPoolStatus();
-        ThreadUtils.sleep(5000);
-    }
+//    @Scheduled(fixedRate = 500)
+//    public void scheduleFixedRateTask1() {
+//        log.info("Task started in : {}", Thread.currentThread().getName());
+//        threadPoolStatusChecker.printThreadPoolStatus();
+//        ThreadUtils.sleep(5000);
+//    }
+//
+//    @Scheduled(fixedRate = 500)
+//    public void scheduleFixedRateTask2() {
+//        log.info("Task started in : {}", Thread.currentThread().getName());
+//        threadPoolStatusChecker.printThreadPoolStatus();
+//        ThreadUtils.sleep(5000);
+//    }
 
 //    @Scheduled(fixedRate = 500, scheduler = "customTaskScheduler")
 //    public void scheduleFixedRateTask3() {
