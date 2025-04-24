@@ -42,3 +42,81 @@ subprojects {
         useJUnitPlatform()
     }
 }
+
+
+def createSpringBootModule = { moduleName, packageName ->
+    def base = file(moduleName)
+    def packagePath = packageName.replace('.', '/')
+
+    def paths = [
+            "${base}/build.gradle",
+            "${base}/src/main/java/${packagePath}",
+            "${base}/src/test/java/${packagePath}"
+    ]
+
+    paths.each { path ->
+        def f = file(path)
+        if (!f.exists()) {
+            f.mkdirs()
+        }
+    }
+
+    // build.gradle 생성
+    def buildFile = file("${base}/build.gradle")
+    if (!buildFile.exists()) {
+        buildFile.text =
+                """
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = '${packageName}'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+                """
+    }
+
+    // Application.java 생성
+    def appClassFile = file("${base}/src/main/java/${packagePath}/Application.java")
+    if (!appClassFile.exists()) {
+        appClassFile.text =
+                """
+package ${packageName};
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+                """
+    }
+}
+
+tasks.register("createModule") {
+    def moduleName = project.findProperty("moduleName")
+    def packageName = project.findProperty("packageName")
+
+    if (!moduleName || !packageName) {
+        throw new GradleException("Usage: ./gradlew createModule -PmoduleName=my-module -PpackageName=com.example.module")
+    }
+
+    doLast {
+        createSpringBootModule(moduleName, packageName)
+        println "Module '${moduleName}' with Spring Boot Application created successfully."
+    }
+}
