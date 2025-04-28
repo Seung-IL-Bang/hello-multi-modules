@@ -43,67 +43,127 @@ subprojects {
     }
 }
 
+/** module auto create script **/
 
 def createSpringBootModule = { moduleName, packageName ->
     def base = file(moduleName)
     def packagePath = packageName.replace('.', '/')
 
-    def paths = [
-            "${base}/build.gradle",
-            "${base}/src/main/java/${packagePath}",
-            "${base}/src/test/java/${packagePath}"
-    ]
+    // 모듈 이름을 카멜 케이스로 변환하는 헬퍼 함수
+    def toCamelCase = { String text ->
+        if (text == null || text.isEmpty()) {
+            return ""
+        }
 
-    paths.each { path ->
+        def result = new StringBuilder()
+        def words = text.split("[-_]") // 하이픈 또는 언더스코어로 분리
+
+        // 첫 번째 단어는 소문자로 시작
+        result.append(words[0].toLowerCase())
+
+        // 나머지 단어들은 대문자로 시작
+        for (int i = 1; i < words.length; i++) {
+            if (!words[i].isEmpty()) {
+                result.append(words[i].substring(0, 1).toUpperCase())
+                if (words[i].length() > 1) {
+                    result.append(words[i].substring(1).toLowerCase())
+                }
+            }
+        }
+
+        return result.toString()
+    }
+
+    def moduleCamelCase = toCamelCase(moduleName)
+    def applicationClassName = "${moduleCamelCase.substring(0, 1).toUpperCase()}${moduleCamelCase.substring(1)}Application"
+
+    // 디렉토리 경로만 생성
+    [
+            "${base}/src/main/java/${packagePath}",
+            "${base}/src/test/java/${packagePath}",
+            "${base}/src/main/resources/static",
+            "${base}/src/main/resources/templates"
+    ].each { path ->
         def f = file(path)
         if (!f.exists()) {
             f.mkdirs()
         }
     }
 
-    // build.gradle 생성
+    // 모듈의 루트 디렉토리 생성
+    if (!base.exists()) {
+        base.mkdirs()
+    }
+
+    // build.gradle 파일 생성 (mkdirs() 사용하지 않음)
     def buildFile = file("${base}/build.gradle")
     if (!buildFile.exists()) {
+        buildFile.createNewFile()  // 먼저 빈 파일 생성
         buildFile.text =
-                """
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.2.5'
-    id 'io.spring.dependency-management' version '1.1.4'
+"""tasks.named('bootJar') {
+    enabled = true
 }
 
-group = '${packageName}'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
-
-repositories {
-    mavenCentral()
+tasks.named('jar') {
+    enabled = false
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
-                """
+"""
     }
 
     // Application.java 생성
-    def appClassFile = file("${base}/src/main/java/${packagePath}/Application.java")
+    def appClassFile = file("${base}/src/main/java/${packagePath}/${applicationClassName}.java")
     if (!appClassFile.exists()) {
+        appClassFile.getParentFile().mkdirs() // 부모 디렉토리 확인
+        appClassFile.createNewFile() // 파일 생성
         appClassFile.text =
-                """
-package ${packageName};
+"""package ${packageName};
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application {
+public class ${applicationClassName} {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(${applicationClassName}.class, args);
     }
 }
-                """
+"""
+    }
+
+    // application.properties 생성
+    def propertiesFile = file("${base}/src/main/resources/application.properties")
+    if (!propertiesFile.exists()) {
+        propertiesFile.getParentFile().mkdirs() // 부모 디렉토리 확인
+        propertiesFile.createNewFile() // 파일 생성
+        propertiesFile.text =
+"""spring.application.name=${moduleName}
+"""
+    }
+
+    // 테스트 클래스 생성
+    def testClassFile = file("${base}/src/test/java/${packagePath}/${applicationClassName}Tests.java")
+    if (!testClassFile.exists()) {
+        testClassFile.getParentFile().mkdirs() // 부모 디렉토리 확인
+        testClassFile.createNewFile() // 파일 생성
+        testClassFile.text =
+"""package ${packageName};
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ${applicationClassName}Tests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
+"""
     }
 }
 
@@ -117,6 +177,58 @@ tasks.register("createModule") {
 
     doLast {
         createSpringBootModule(moduleName, packageName)
+
+        // 모듈 이름을 카멜 케이스로 변환하는 헬퍼 함수 (task 내에서 재정의)
+        def toCamelCase = { String text ->
+            if (text == null || text.isEmpty()) {
+                return ""
+            }
+
+            def result = new StringBuilder()
+            def words = text.split("[-_]") // 하이픈 또는 언더스코어로 분리
+
+            // 첫 번째 단어는 소문자로 시작
+            result.append(words[0].toLowerCase())
+
+            // 나머지 단어들은 대문자로 시작
+            for (int i = 1; i < words.length; i++) {
+                if (!words[i].isEmpty()) {
+                    result.append(words[i].substring(0, 1).toUpperCase())
+                    if (words[i].length() > 1) {
+                        result.append(words[i].substring(1).toLowerCase())
+                    }
+                }
+            }
+
+            return result.toString()
+        }
+
+        def moduleCamelCase = toCamelCase(moduleName)
+        def applicationClassName = "${moduleCamelCase.substring(0, 1).toUpperCase()}${moduleCamelCase.substring(1)}Application"
+
+        // settings.gradle 파일 업데이트
+        def settingsFile = file("${project.rootDir}/settings.gradle")
+        if (settingsFile.exists()) {
+            def settingsContent = settingsFile.text
+
+            // 이미 포함되어 있는지 확인
+            if (!settingsContent.contains("include '${moduleName}'")) {
+                // 새로운 include 명령어 추가
+                if (settingsContent.endsWith("\n")) {
+                    settingsFile << "include('${moduleName}')"
+                } else {
+                    settingsFile << "\ninclude('${moduleName}')"
+                }
+                println "Added '${moduleName}' to settings.gradle"
+            } else {
+                println "Module '${moduleName}' was already included in settings.gradle"
+            }
+        } else {
+            println "settings.gradle file not found."
+        }
+
         println "Module '${moduleName}' with Spring Boot Application created successfully."
+        println "Application class: ${applicationClassName}.java"
+        println "Test class: ${applicationClassName}Tests.java"
     }
 }
