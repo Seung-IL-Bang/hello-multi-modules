@@ -169,7 +169,7 @@ class ${applicationClassName}Tests {
 
 tasks.register("createModule") {
     def moduleName = project.findProperty("moduleName")
-    def packageName = project.findProperty("packageName")
+    def packageName = project.findProperty("packageName") != null ? project.findProperty("packageName") : project.group.toString()
 
     if (!moduleName || !packageName) {
         throw new GradleException("Usage: ./gradlew createModule -PmoduleName=my-module -PpackageName=com.example.module")
