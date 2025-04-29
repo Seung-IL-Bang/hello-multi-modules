@@ -1,6 +1,7 @@
 plugins {
     id 'actuator-convention'
     id "com.gorylenko.gradle-git-properties" version "2.4.1" // git info
+    id 'prometheus-convention'
 }
 
 springBoot {
