@@ -1,0 +1,16 @@
+plugins {
+    id 'lombok-convention'
+    id 'actuator-convention'
+}
+
+tasks.named('bootJar') {
+    enabled = true
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}

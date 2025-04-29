@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: "logger-module"
+
+logging:
+  level:
+    io.hello.demo.controller: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "loggers"
+
+
+# ??? ?? ??? ???? ?? ?? ??? ???? ??? ? ??.
+# http://localhost:8080/actuator/loggers/{????}
+# http://localhost:8080/actuator/loggers/io.hello.demo.controller
+
+# ??? ?? ?? ??
+# POST http://localhost:8080/actuator/loggers/io.hello.demo.controller
+# Content-Type: application/json
+#
+# {
+#   "configuredLevel": "INFO"
+# }
