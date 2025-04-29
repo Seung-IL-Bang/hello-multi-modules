@@ -1,0 +1,20 @@
+plugins {
+    id 'actuator-convention'
+    id "com.gorylenko.gradle-git-properties" version "2.4.1" // git info
+}
+
+springBoot {
+    buildInfo()
+}
+
+tasks.named('bootJar') {
+    enabled = true
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}
