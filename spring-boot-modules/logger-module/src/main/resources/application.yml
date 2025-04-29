@@ -13,11 +13,10 @@ management:
         include: "loggers"
 
 
-# ??? ?? ??? ???? ?? ?? ??? ???? ??? ? ??.
-# http://localhost:8080/actuator/loggers/{????}
+# http://localhost:8080/actuator/loggers/{logger-name}
 # http://localhost:8080/actuator/loggers/io.hello.demo.controller
 
-# ??? ?? ?? ??
+# runtime change the log level
 # POST http://localhost:8080/actuator/loggers/io.hello.demo.controller
 # Content-Type: application/json
 #
