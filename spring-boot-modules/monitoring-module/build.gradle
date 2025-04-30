@@ -1,0 +1,20 @@
+plugins {
+    id 'actuator-convention'
+    id 'prometheus-convention'
+    id 'lombok-convention'
+}
+
+tasks.named('bootJar') {
+    enabled = true
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    implementation project(':storage-modules:h2')
+}
