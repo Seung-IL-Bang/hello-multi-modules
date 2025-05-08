@@ -1,0 +1,6 @@
+insert into PERSON (ID, NAME) values
+(1, 'John Doe'),
+(2, 'Jane Smith'),
+(3, 'Alice Johnson'),
+(4, 'Bob Brown'),
+(5, 'Charlie Davis');

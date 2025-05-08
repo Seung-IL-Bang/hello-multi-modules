@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: flyway-module
+  profiles:
+    include: "h2,flyway"
