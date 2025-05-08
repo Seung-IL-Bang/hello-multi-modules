@@ -3,3 +3,6 @@ spring:
     name: flyway-module
   profiles:
     include: "h2,flyway"
+  jpa:
+    hibernate:
+      ddl-auto: validate
