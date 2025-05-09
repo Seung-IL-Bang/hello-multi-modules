@@ -5,10 +5,8 @@ import memory.library.MemoryFinder;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @AutoConfiguration
-@Configuration
 @ConditionalOnProperty(name = "spring.profiles.active", havingValue = "dev", matchIfMissing = true)
 public class MemoryAutoConfig {
 
