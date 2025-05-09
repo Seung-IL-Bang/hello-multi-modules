@@ -1,0 +1,14 @@
+tasks.named('bootJar') {
+    enabled = true
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+//    implementation files('libs/conditional-module-auto-config-SNAPSHOT-plain.jar')
+    implementation project(':spring-boot-modules:conditional-module')
+}
