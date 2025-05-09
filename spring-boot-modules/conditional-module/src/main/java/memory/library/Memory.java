@@ -1,4 +1,4 @@
-package io.hello.demo;
+package memory.library;
 
 import lombok.Getter;
 import lombok.ToString;

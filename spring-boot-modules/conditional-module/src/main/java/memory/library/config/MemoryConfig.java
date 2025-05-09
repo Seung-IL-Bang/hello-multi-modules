@@ -1,13 +1,12 @@
-package io.hello.demo.config;
+package memory.library.config;
 
-import io.hello.demo.MemoryController;
-import io.hello.demo.MemoryFinder;
-import org.springframework.boot.autoconfigure.condition.*;
+import memory.library.MemoryController;
+import memory.library.MemoryFinder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 @Conditional(MemoryCondition.class)
 //@ConditionalOnProperty(name = "spring.profiles.active", havingValue = "dev", matchIfMissing = true)
 //@ConditionalOnBean(MemoryController.class)

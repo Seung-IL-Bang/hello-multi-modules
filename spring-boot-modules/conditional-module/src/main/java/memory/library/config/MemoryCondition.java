@@ -1,4 +1,4 @@
-package io.hello.demo.config;
+package memory.library.config;
 
 import io.micrometer.common.util.StringUtils;
 import org.springframework.context.annotation.Condition;

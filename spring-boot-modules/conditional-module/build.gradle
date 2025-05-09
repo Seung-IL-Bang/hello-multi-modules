@@ -3,12 +3,15 @@ plugins {
 }
 
 tasks.named('bootJar') {
-    enabled = true
+    enabled = false
 }
 
 tasks.named('jar') {
-    enabled = false
+    enabled = true
 }
+
+group = 'memory.library'
+version = 'auto-config-SNAPSHOT'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
