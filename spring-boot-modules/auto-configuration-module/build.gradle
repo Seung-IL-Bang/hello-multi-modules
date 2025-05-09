@@ -9,6 +9,6 @@ tasks.named('jar') {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-//    implementation files('libs/conditional-module-auto-config-SNAPSHOT-plain.jar')
-    implementation project(':spring-boot-modules:conditional-module')
+    implementation files('libs/conditional-module-auto-config-SNAPSHOT-plain.jar')
+//    implementation project(':spring-boot-modules:conditional-module')
 }
